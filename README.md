@@ -4,7 +4,7 @@
 
 Run MTP-ns-3.sh to initialize ns-3 for MTP development. See file for full details.
 
-Note that ns-3 is only configured to build the following modules:
+Note that ns-3 is configured to only build the following modules:
 - core
 - network
 - internet
