@@ -9,7 +9,7 @@ function print {
 # Required packages
 print "Installing Required Packages"
 sudo apt update
-sudo apt install cmake -y
+sudo apt install build-essential cmake -y
 
 # Setup ns-3
 print "Setting up ns-3"

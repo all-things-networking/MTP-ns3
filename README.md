@@ -21,6 +21,9 @@ Note that ns-3 is configured to only build the following modules:
 
 ## Versions
 
+Ubuntu 22.04.04 LTS (green05 in SYN cluster)
+
 Package | Version
 --- | ---
+build-essential | N/A
 cmake | 3.22.1+
