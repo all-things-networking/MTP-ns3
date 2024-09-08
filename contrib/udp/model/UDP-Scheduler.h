@@ -19,6 +19,8 @@ class MTHeader;
 // ==========================================================================================
 // QUESTIONS/TODOS:
 //   - What are flows and how are they incorporated?
+//     - represents connections
+//     - scheduler chooses between flows (skip) and then chooses between events from that flow
 //   - Slightly lost as to what functionality we need to implement to ensure compatibility with
 //     MTP specification i.e. Listing 8
 //     - which aspects of this functionality will be implemented in the MTP UDP example vs. in here?

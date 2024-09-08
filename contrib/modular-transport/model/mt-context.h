@@ -15,7 +15,9 @@ class ModularTransport;
 class MTContext{
 public:
     MTContext();
-    virtual ~MTContext();
+
+    // to ensure the class is abstract/not instantiable
+    virtual ~MTContext() = 0;
 };
 
 } // namespace ns3

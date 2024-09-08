@@ -14,6 +14,9 @@ class MTEventProcessor;
 
 // to review: called MTDispatcher but compiler calls it Dispatcher
 class MTDispatcher{
+    // to ensure the class is abstract
+    virtual ~MTDispatcher() = 0;
+
     // review this: note this is the type that will be returned when getEventMap is called in the compiler
     // std::unordered_map<std::pair<ns3::EventType, ns3::EventSubtype>, std::vector<MTEventProcessor*>> eventMap;
     std::unordered_map<std::string, std::vector<MTEventProcessor*>> eventMap;

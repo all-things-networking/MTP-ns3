@@ -27,6 +27,7 @@ class MTHeader : public Header {
     uint32_t GetSerializedSize() const override;
     void Serialize(Buffer::Iterator start) const override;
     uint32_t Deserialize(Buffer::Iterator start) override;
+    void Print(std::ostream& os) const override;
 };
 
 } // namespace ns3

@@ -52,6 +52,12 @@ MTHeader::Deserialize(Buffer::Iterator start)
     return GetSerializedSize();
 }
 
+void
+MTHeader::Print(std::ostream& os) const
+{
+
+}
+
 std::ostream&
 operator<<(std::ostream& os, const MTHeader& h)
 {
