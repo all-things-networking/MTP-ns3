@@ -12,6 +12,10 @@ namespace ns3 {
         flow_map<queue_set> flowMap;
         MTScheduler * sched;
 
+        // for choosing next event/flow
+        flow_map<unsigned int> eventSelector;
+        unsigned int flowSelector;
+
         public:
             MTTXAppScheduler(ModularTransport *mt, MTScheduler * sched);
             virtual ~MTTXAppScheduler();
@@ -23,7 +27,7 @@ namespace ns3 {
             virtual void next_feedback();
 
             // receives outgoing application events and enqueues them into the queue of the event's flow
-            virtual void enqueue_app_event(MTEvent * e);
+            virtual void enqueue_app_event(event_t * e);
     };
 }
 

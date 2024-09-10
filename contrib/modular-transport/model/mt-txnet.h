@@ -7,7 +7,11 @@ namespace ns3 {
   class MTTXNetScheduler {
     MTScheduler * sched;
 
-    flow_map<queue_t<MTEvent *>> txQueues;
+    flow_map<queue_t<event_t *>> txQueues;
+
+    // for choosing next event/flow
+    flow_map<unsigned int>   eventSelector;
+    unsigned int flowSelector;
 
     public:
       MTTXNetScheduler(MTScheduler * sched);

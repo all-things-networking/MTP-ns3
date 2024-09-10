@@ -19,6 +19,7 @@ namespace ns3 {
     bool paused;
 
     public:
+      queue_t();
       queue_t(int lower_limit, int upper_limit, bool (*drop_policy) (event));
       ~queue_t();
       bool pause();

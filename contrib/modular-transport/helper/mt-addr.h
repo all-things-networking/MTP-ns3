@@ -6,7 +6,7 @@
 #include "mtp-types.h"
 
 namespace ns3 {
-  typedef uintptr_t addr_t;
+  typedef uint8_t * addr_t;
 }
 
 #endif

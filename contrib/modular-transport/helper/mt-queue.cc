@@ -8,6 +8,14 @@ namespace ns3 {
       drop_policy{drop_policy},
       paused{false}
     {}
+
+    template<typename event>
+    queue_t<event>::queue_t():
+      upper_limit{100000},
+      lower_limit{0},
+      drop_policy{[](event e) { return false; }},
+      paused{false}
+    {}
   
     template<typename event>
     queue_t<event>::~queue_t() {
@@ -35,6 +43,13 @@ namespace ns3 {
           }
         }
       } 
+      
+      // if queue is still full (i.e. drop policy didn't drop any packets), 
+      //  then drop this packet
+      if (eventQueue.size() > upper_limit) {
+        return;
+      }
+
       eventQueue.push(e);
     }
 

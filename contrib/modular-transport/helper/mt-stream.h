@@ -3,28 +3,38 @@
 
 #include <vector>
 #include <cstdint> // uint8_t
+#include <numeric>
 
 #include "mtp-types.h"
 
 namespace ns3 {
   class stream {
-    std::vector<uint8_t> data;
+    uint8_t * data;
+    // size of the heap allocation
+    int size;
+    // how many bytes are actually stored within data
+    int length;
+
+    // Scaffolding for alternative implementation
+    // std::vector<uint8_t *> dataStreams;
+    // std::vector<int> streamSizes;
+    // std::vector<int> allocationSizes;
 
     public:
-      stream();
+      stream(int size = 80000);
       ~stream();
       int len() const;
-      stream substream(int start, int end) const;
-      void stream::mem_append(addr_t address, int length);
+      stream * substream(int start, int end) const;
+      
+      // assume lengths are in bytes
+      addr_t stream::mem_append(addr_t address, int length);
       addr_t hold_data(stream data, flow_id flow, int length);
-      std::vector<uint8_t> get_data() const;
-
-      // todo: implement hold_data and release_data after clarification from Kimiya
-
+      stream * release_data(stream data, addr_t addr, flow_id flow, int length);
+      addr_t get_data() const;
   };
 
   void mem_write(addr_t address, stream & data, int offset, int length) {
-    std::copy(data.get_data().begin() + offset, data.get_data().begin() + offset + length, reinterpret_cast<uint8_t*>(address));
+    std::copy(data.get_data(), data.get_data() + length, address + offset);
   }
 
 }
