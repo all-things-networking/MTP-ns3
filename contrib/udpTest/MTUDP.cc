@@ -2,6 +2,7 @@
 #include "UDPRXApp.h"
 #include "UDPDispatcher.h"
 #include "UDPContext.h"
+#include "UDPStructs.h"
 
 using namespace ns3;
 
@@ -9,7 +10,7 @@ MTUDP::MTUDP()
 {
     this->rxapp = new UDPRXAppParser();
     this->dispatcher = new UDPDispatcher();
-    
+    this->interm_output = new interm_out();
 }
 
 MTUDP::~MTUDP()

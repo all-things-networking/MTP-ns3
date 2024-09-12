@@ -6,6 +6,7 @@
 #include "mt-scheduler.h"
 #include "mt-dispatcher.h"
 #include "mt-context.h"
+#include "ns3/mtp-types.h"
 #include "ns3/ip-l4-protocol.h"
 
 #include "ns3/ipv4-address.h"
@@ -115,6 +116,7 @@ class ModularTransport: public IpL4Protocol
     MTRXAppParser* rxapp;
     MTScheduler* scheduler;
     MTDispatcher* dispatcher;
+    MTIntermediateOutput* interm_output;
     flow_map<MTContext*> ctx_table;
 
   private:

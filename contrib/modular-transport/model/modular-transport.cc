@@ -77,9 +77,7 @@ void ModularTransport::Mainloop(){
          std::vector<MTEvent*> newEvents;
          std::vector<Packet> packetToSend;
 
-        //  // intermediate output for the chain of processors
-        //  IntermediateOutput* intermOutput;
-        //  EventProcessorOutput* epout = new EventProcessorOutput{newEvents, ctx, packetToSend, intermOutput};
+        EventProcessorOutput* epout = new EventProcessorOutput{newEvents, ctx, packetToSend, interm_output};
 
         //  // run through all processors
         //  for (auto processor : ep) 
