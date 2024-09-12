@@ -2,6 +2,7 @@
 #define MT_SCHEDULER_H
 
 #include <vector>
+#include <queue>
 #include "../helper/mtp-types.h"
 #include "mt-event.h"
 
@@ -9,20 +10,22 @@ namespace ns3 {
   class queue_set {
     public:
       // queue set
-      queue_t<event_t *>    appQueue;
-      queue_t<event_t *>    netQueue;
-      queue_t<event_t *>   progQueue;
-      queue_t<event_t *> urgentQueue;
-      queue_t<event_t *>  timerQueue;
-      queue_t<event_t *>    memQueue;
+      std::queue<MTEvent *>    appQueue;
+      std::queue<MTEvent *>    netQueue;
+      std::queue<MTEvent *>   progQueue;
+      std::queue<MTEvent *> urgentQueue;
+      std::queue<MTEvent *>  timerQueue;
+      std::queue<MTEvent *>    memQueue;
+      int total_queues;
 
       // used when selecting for round-robin scheduling
-      std::vector<queue_t<event_t *> *> queues;
 
-      void enqueue_event(event_t * event);
+      void enqueue_event(MTEvent * event);
+      std::queue<MTEvent *> get_queue(int selector);
+      void pop_queue(int selector);
+      bool is_empty();
 
       queue_set();
-      ~queue_set();
   };
 
   class MTScheduler {
@@ -35,18 +38,19 @@ namespace ns3 {
 
     public:
       MTScheduler();
-      ~MTScheduler();
+      ~MTScheduler(){}
 
       // used to store data from packets belonging to this flow while they are being processed
-      flow_map<stream> transitoryMemory;
+      //flow_map<stream> transitoryMemory;
 
-      void enqueue_event(flow_id id, event_t * event);
-      virtual void initialize();
+      void enqueue_event(flow_id id, MTEvent * event);
+      void initialize();
       flow_id next_flow();
-      event_t * next_event(flow_id id);
+      MTEvent * next_event(flow_id id);
+
+      bool is_empty();
  
-      friend event_t * get_next_event(MTScheduler * scheduler);
-      friend void enqueue_event(flow_map<queue_set> flowMap, flow_id id, event_t * event);
+      MTEvent * get_next_event();
   };
 }
 

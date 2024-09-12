@@ -1,8 +1,9 @@
 #include "mt-scheduler.h"
+#include <iostream>
 
 namespace ns3 {
   queue_set::queue_set() {
-    queues = {&appQueue, &netQueue, &progQueue, &urgentQueue, &timerQueue, &memQueue};
+    total_queues = 6;
   }
 
   MTScheduler::MTScheduler() {
@@ -11,32 +12,53 @@ namespace ns3 {
     flowSelector = 0;
   }
 
-  void MTScheduler::enqueue_event(flow_id id, event_t * event) {
+  void MTScheduler::enqueue_event(flow_id id, MTEvent * event) {
     flowMap[id].enqueue_event(event);
+    std::cout <<"added event."<<event->subtype<< std::endl;
   }
 
   flow_id MTScheduler::next_flow() {
     auto it = flowMap.begin();
     for (int i = 0; i < flowSelector; i++) {
-      it = it->next();
+      it++;
     }
+    flowSelector++;
     return it->first;
   }
 
-  event_t * MTScheduler::next_event(flow_id id) {
-    queue_set & flowQueueSet = flowMap[id];
-    unsigned int selector = eventSelector[id]++ % flowQueueSet.queues.size();
-    return flowQueueSet.queues[selector]->pop();
+  MTEvent * MTScheduler::next_event(flow_id id) {
+    queue_set flowQueueSet = flowMap[id];
+    unsigned int selector=0;
+    do{
+      selector = eventSelector[id]++ % flowQueueSet.total_queues;
+    }while(flowQueueSet.get_queue(selector).empty());
+    MTEvent* ev = flowQueueSet.get_queue(selector).front();
+    flowMap[id].pop_queue(selector);
+    return ev;
   }
 
-  event_t * get_next_event(MTScheduler * scheduler) {
-    flow_id id = scheduler->next_flow();
-    event_t * event = scheduler->next_event(id);
+  MTEvent * MTScheduler::get_next_event() {
+    flow_id id;
+    do{
+      id = this->next_flow();
+    }while(flowMap[id].is_empty());
+    MTEvent * event = this->next_event(id);
     return event;
   }
 
-  void queue_set::enqueue_event(event_t * event) {
-    switch (event->type) {
+  bool MTScheduler::is_empty(){
+    std::cout <<"checking for empty."<< std::endl;
+    for (auto it = flowMap.begin(); it != flowMap.end(); it++) {
+      if(!it->second.is_empty()){
+        std::cout <<"not empty"<<it->first<< std::endl;
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void queue_set::enqueue_event(MTEvent * event) {
+    switch (event->subtype) {
       case APP_EVENT:
         appQueue.push(event);
         break;
@@ -57,5 +79,56 @@ namespace ns3 {
         break;
     }
   }
+
+  bool queue_set::is_empty() {
+    return appQueue.empty()&&netQueue.empty()&&progQueue.empty()&&urgentQueue.empty()&&timerQueue.empty()&&memQueue.empty();
+  }
+
+  std::queue<MTEvent *> queue_set::get_queue(int selector){
+    switch (selector) {
+      case APP_EVENT:
+        return appQueue;
+        break;
+      case NET_EVENT:
+        return netQueue;
+        break;
+      case PROG_EVENT:
+        return progQueue;
+        break;
+      case URGENT_EVENT:
+        return urgentQueue;
+        break;
+      case TIMER_EVENT:
+        return timerQueue;
+        break;
+      case MEM_EVENT:
+        return memQueue;
+        break;
+    }
+  }
+
+  void queue_set::pop_queue(int selector){
+    switch (selector) {
+      case APP_EVENT:
+        appQueue.pop();
+        break;
+      case NET_EVENT:
+        netQueue.pop();
+        break;
+      case PROG_EVENT:
+        progQueue.pop();
+        break;
+      case URGENT_EVENT:
+        urgentQueue.pop();
+        break;
+      case TIMER_EVENT:
+        timerQueue.pop();
+        break;
+      case MEM_EVENT:
+        memQueue.pop();
+        break;
+    }
+  }
+
 }
 

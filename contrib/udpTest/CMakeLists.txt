@@ -11,15 +11,13 @@ if(${ENABLE_EXAMPLES})
 endif()
 
 build_lib(
-    LIBNAME modular-transport
-    SOURCE_FILES model/modular-transport.cc
-                model/mt-event.cc
-                model/mt-scheduler.cc
-    HEADER_FILES model/modular-transport.h
-                helper/mtp-types.h
-                model/mt-rxapp.h
-                model/mt-event.h
-                model/mt-scheduler.h
+    LIBNAME udpTest
+    SOURCE_FILES MTUDP.cc
+                 UDPRXApp.cc
+    HEADER_FILES MTUDP.h
+                 UDPRXApp.h
+                 UDPEvents.h
+                
     LIBRARIES_TO_LINK ${libinternet}
     TEST_SOURCES test/modular-transport-test-suite.cc
                  ${examples_as_tests_sources}

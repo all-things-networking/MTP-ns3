@@ -13,15 +13,17 @@ namespace ns3 {
     public:
       int size;
       uint8_t * msg;
-
+      app_msg_t(){}
       app_msg_t(const app_msg_t& other, int size) : size{size}, msg{msg} {}
       
       app_msg_t operator=(const app_msg_t& other) {
         msg = other.msg;
+        return *this;
       }
 
       app_msg_t operator=(uint8_t * other) {
         msg = other;
+        return *this;
       }
 
       int len() { return size; }

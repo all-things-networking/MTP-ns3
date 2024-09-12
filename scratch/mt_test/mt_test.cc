@@ -20,6 +20,7 @@
 #include "ns3/ipv4-global-routing-helper.h"
 #include "ns3/traffic-control-layer.h"
 #include "ns3/modular-transport.h"
+#include "ns3/MTUDP.h"
 
 using namespace ns3;
 
@@ -73,7 +74,8 @@ main (int argc, char *argv[])
     arp->SetTrafficControl(tc);
 
     NS_LOG_UNCOND ("Installing Modular Transport on Node " << node->GetId());
-    Ptr<ModularTransport> transport = CreateObject<ModularTransport>();
+    //Ptr<ModularTransport> transport = CreateObject<ModularTransport>();
+    Ptr<MTUDP> transport = CreateObject<MTUDP>();
     node->AggregateObject(transport);
   }
 
@@ -111,11 +113,11 @@ main (int argc, char *argv[])
   NS_LOG_UNCOND("Destination address: " << daddr);
 
   Ptr<Packet> packet = Create<Packet> (100);
-  MTHeader mth;
-  mth.SetF1(2);
-  Ptr<ModularTransport> transport = src->GetObject<ModularTransport>();
-  Simulator::Schedule(Seconds(1), &ModularTransport::SendPacket, transport, packet, mth, saddr, daddr);
-  
+  //MTHeader mth;
+  //mth.SetF1(2);
+  Ptr<MTUDP> transport = src->GetObject<MTUDP>();
+  //Simulator::Schedule(Seconds(1), &ModularTransport::SendPacket, transport, packet, mth, saddr, daddr);
+  Simulator::Schedule(Seconds(1), &MTUDP::ReceiveAppMessage, transport, saddr, daddr);
 
   Simulator::Run ();
   Simulator::Destroy ();

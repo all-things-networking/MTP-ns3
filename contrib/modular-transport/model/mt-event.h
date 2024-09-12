@@ -11,8 +11,6 @@ namespace ns3{
 
 // TODO: Do we need to implement a TX_EVENT type (from page 27 of the Overleaf doc) ?
 
-class MTHeader;
-
 enum EventType {
     INCOMING, // event that transfers nothing to outer layers
     OUTGOING,  // event that transfers packets or feedback to outer layers
@@ -43,7 +41,6 @@ class MTEvent {
                 EventSubtype subtype,
                 long time, 
                 flow_id flowId);
-        virtual ~MTEvent();
 };
 
 class MemEvent : public MTEvent {
@@ -57,27 +54,27 @@ class MemEvent : public MTEvent {
                 int32_t atomic_op, 
                 addr_t address, 
                 int length);
-        ~MemEvent() override;
+        //~MemEvent() override;
 };
 
 class UrgentEvent : public MTEvent {
     public:
         UrgentEvent(long time, 
                     flow_id flowId);
-        ~UrgentEvent() override;
+        //~UrgentEvent() override;
 };
 
 class ProgEvent : public MTEvent {
     public:
         ProgEvent(long time, 
                 flow_id flowId);
-        ~ProgEvent() override;
+        //~ProgEvent() override;
 };
 
 class TimerEvent : public MTEvent {
     public:
         TimerEvent(long time, flow_id flowId);
-        ~TimerEvent() override;
+        //~TimerEvent() override;
 };
 
 class NetEvent : public MTEvent {
@@ -85,7 +82,7 @@ class NetEvent : public MTEvent {
         NetEvent(EventType type,
                 long time, 
                 flow_id flowId);
-        ~NetEvent() override;
+        //~NetEvent() override;
 };
 
 class AppEvent : public MTEvent {
@@ -93,17 +90,17 @@ class AppEvent : public MTEvent {
         AppEvent(EventType type,
                 long time, 
                 flow_id flowId);
-        ~AppEvent() override;
+        //~AppEvent() override;
 };
 
 // are these necessary?
-flow_id get_flow_id(event_t * event) {
-    return event->flowId;
-}
+// flow_id get_flow_id(MTEvent * event) {
+//     return event->flowId;
+// }
 
-void set_flow_id(event_t * event, flow_id id) {
-    event->flowId = id;
-}
+// void set_flow_id(MTEvent * event, flow_id id) {
+//     event->flowId = id;
+// }
 
 } // namespace ns3
 #endif

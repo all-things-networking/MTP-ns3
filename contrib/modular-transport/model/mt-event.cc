@@ -6,12 +6,7 @@ namespace ns3 {
     type{type},
     subtype{std::move(subtype)},
     time{time},
-    flowId{flowId}
-    {
-      if (type == EventType::INCOMING && (subtype != EventSubtype::APP_EVENT || subtype != EventSubtype::NET_EVENT)) {
-        throw std::runtime_error("Invalid subtype for incoming event");
-      }
-    }
+    flowId{flowId}{}
 
   MemEvent::MemEvent(long time, flow_id flowId, int32_t atomic_op, addr_t address, int length): 
     MTEvent{EventType::INCOMING, EventSubtype::MEM_EVENT, time, flowId},

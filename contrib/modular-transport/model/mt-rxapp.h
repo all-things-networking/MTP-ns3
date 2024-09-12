@@ -2,19 +2,14 @@
 #define MT_RX_APP_H
 
 #include "../helper/mtp-types.h"
-#include "mt-scheduler.h"
+#include "ns3/mt-event.h"
 
 namespace ns3 {
   class MTRXAppParser {
-    MTScheduler * sched;
     public:
-      MTRXAppParser(MTScheduler * sched);
-      virtual ~MTRXAppParser();
-
-      // not sure this needs to be a field
-      app_hdr_t header;
-      
-      virtual event_t request_parser(app_msg_t request);
+      MTRXAppParser(){}
+      ~MTRXAppParser(){}
+      virtual MTEvent* request_parser(app_msg_t request)=0;
   };
 }
 

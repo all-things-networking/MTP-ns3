@@ -2,8 +2,8 @@
 #ifndef MODULAR_TRANSPORT_H
 #define MODULAR_TRANSPORT_H
 
-#include "mt-header.h"
-
+#include "mt-rxapp.h"
+#include "mt-scheduler.h"
 #include "ns3/ip-l4-protocol.h"
 
 #include "ns3/ipv4-address.h"
@@ -38,6 +38,18 @@ class ModularTransport: public IpL4Protocol
      */
     void SetNode(Ptr<Node> node);
 
+    void Start(
+               const Ipv4Address& saddr,
+               const Ipv4Address& daddr/*,
+               MTContext* StartContext*/);
+
+    void ReceiveAppMessage(const Ipv4Address& saddr,const Ipv4Address& daddr);
+    void ReceiveNetPacket(const Ipv4Address& saddr,const Ipv4Address& daddr);
+    /**
+    main of simulation
+    */
+    void Mainloop();
+
      /**
      * \brief Send a packet
      *
@@ -46,10 +58,10 @@ class ModularTransport: public IpL4Protocol
      * \param saddr The source Ipv4Address
      * \param daddr The destination Ipv4Address
      */
-    void SendPacket(Ptr<Packet> pkt,
-                    const MTHeader& outgoing,
-                    const Ipv4Address& saddr,
-                    const Ipv4Address& daddr) const; 
+    // void SendPacket(Ptr<Packet> pkt,
+    //                 const MTHeader& outgoing,
+    //                 const Ipv4Address& saddr,
+    //                 const Ipv4Address& daddr) const; 
 
     // From IpL4Protocol
     enum IpL4Protocol::RxStatus Receive(Ptr<Packet> p,
@@ -96,8 +108,12 @@ class ModularTransport: public IpL4Protocol
      * linking it to the ipv4 or ipv6 and setting up other relevant state.
      */
     void NotifyNewAggregate() override;
+    MTRXAppParser* rxapp;
+    MTScheduler* scheduler;
 
   private:
+    // MTDispatcher* dispatcher;
+    // MTReceiver* receiver;
     Ptr<Node> m_node;                                //!< the node this stack is associated with
     IpL4Protocol::DownTargetCallback m_downTarget;   //!< Callback to send packets over IPv4
     IpL4Protocol::DownTargetCallback6 m_downTarget6; //!< Callback to send packets over IPv6

@@ -3,7 +3,7 @@
 
 #include <cstdlib>
 #include <utility> // declval
-namespace ns3 {
+
   typedef int flow_id;
 
   // the rest of this is code for a template flow_id class that can take in any number of 
@@ -36,7 +36,7 @@ namespace ns3 {
   //       return id;
   //     }
   // };
-}
+
 
 // namespace std {
   // // primary template specialized below
