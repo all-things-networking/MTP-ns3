@@ -20,6 +20,9 @@ build_lib(
                 model/mt-rxapp.h
                 model/mt-event.h
                 model/mt-scheduler.h
+                model/mt-dispatcher.h
+                model/mt-eventprocessor.h
+                model/mt-context.h
     LIBRARIES_TO_LINK ${libinternet}
     TEST_SOURCES test/modular-transport-test-suite.cc
                  ${examples_as_tests_sources}

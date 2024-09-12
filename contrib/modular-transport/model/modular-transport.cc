@@ -4,6 +4,7 @@
 
 #include "ns3/ipv4-l3-protocol.h"
 #include "ns3/node.h"
+#include "mt-eventprocessor.h"
 
 namespace ns3
 {
@@ -65,7 +66,8 @@ void ModularTransport::Mainloop(){
     while (!this->scheduler->is_empty()){
         MTEvent* e = this->scheduler->get_next_event();
         std::cout <<"got event."<< e->time << std::endl;
-        //  std::vector<MTEventProcessor*> ep= this->dispatcher->dispatch(e);
+        std::vector<MTEventProcessor*> ep= this->dispatcher->dispatch(e);
+        std::cout <<"got event procs : "<< ep.size() << std::endl;
         //  MTContext* ctx = this->table.GetVal(e->flow_id);
 
         //  std::vector<MTEvent*> newEvents;

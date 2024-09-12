@@ -11,6 +11,7 @@ public:
 	SEND_EVENT(long time, int flow_id)
 	:MTEvent(ns3::EventType::INCOMING, ns3::EventSubtype::APP_EVENT, time,flow_id)
 	{}
+	void getType()override{}
 };
 // class RECV_EVENT : public ns3::MTEvent
 // {

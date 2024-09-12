@@ -14,9 +14,15 @@ build_lib(
     LIBNAME udpTest
     SOURCE_FILES MTUDP.cc
                  UDPRXApp.cc
+                 UDPDispatcher.cc
     HEADER_FILES MTUDP.h
                  UDPRXApp.h
                  UDPEvents.h
+                 UDPEventProcs.h
+                 UDPDispatcher.h
+                 UDPContext.h
+                 UDPStructs.h
+
                 
     LIBRARIES_TO_LINK ${libinternet}
     TEST_SOURCES test/modular-transport-test-suite.cc

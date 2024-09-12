@@ -11,13 +11,9 @@
 
 namespace ns3 {
 
-  class IntermediateOutput {
-    // to ensure the class is abstract/not instantiable
-    virtual ~IntermediateOutput() = 0;
-  };
+  class MTIntermediateOutput {
 
-  // should this happen here? or only once a concrete subclass is implemented?
-  typedef IntermediateOutput interm_output;
+  };
 
   // event_t
   //typedef MTEvent event_t;

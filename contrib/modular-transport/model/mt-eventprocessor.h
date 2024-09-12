@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <utility> // std::pair
-#include "mt-intermediateoutput.h"
+#include "ns3/mtp-types.h"
 #include "mt-event.h"
 
 namespace ns3
@@ -27,7 +27,7 @@ struct EventProcessorOutput;
 class MTEventProcessor
 {
 public:
-    MTEventProcessor();
+    MTEventProcessor(){}
 
     /**
      * \brief Process the event and return the processed results.

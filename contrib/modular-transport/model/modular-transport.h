@@ -4,6 +4,7 @@
 
 #include "mt-rxapp.h"
 #include "mt-scheduler.h"
+#include "mt-dispatcher.h"
 #include "ns3/ip-l4-protocol.h"
 
 #include "ns3/ipv4-address.h"
@@ -110,6 +111,7 @@ class ModularTransport: public IpL4Protocol
     void NotifyNewAggregate() override;
     MTRXAppParser* rxapp;
     MTScheduler* scheduler;
+    MTDispatcher* dispatcher;
 
   private:
     // MTDispatcher* dispatcher;
