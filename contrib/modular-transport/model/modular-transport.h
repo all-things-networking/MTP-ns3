@@ -5,6 +5,7 @@
 #include "mt-rxapp.h"
 #include "mt-scheduler.h"
 #include "mt-dispatcher.h"
+#include "mt-context.h"
 #include "ns3/ip-l4-protocol.h"
 
 #include "ns3/ipv4-address.h"
@@ -96,6 +97,8 @@ class ModularTransport: public IpL4Protocol
     IpL4Protocol::DownTargetCallback GetDownTarget() const override;
     IpL4Protocol::DownTargetCallback6 GetDownTarget6() const override;
 
+    virtual MTContext* InitContext(flow_id fid){return NULL;}
+
   protected:
     void DoDispose() override;
 
@@ -112,6 +115,7 @@ class ModularTransport: public IpL4Protocol
     MTRXAppParser* rxapp;
     MTScheduler* scheduler;
     MTDispatcher* dispatcher;
+    flow_map<MTContext*> ctx_table;
 
   private:
     // MTDispatcher* dispatcher;

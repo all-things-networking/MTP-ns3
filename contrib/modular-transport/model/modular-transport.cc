@@ -68,11 +68,14 @@ void ModularTransport::Mainloop(){
         std::cout <<"got event."<< e->time << std::endl;
         std::vector<MTEventProcessor*> ep= this->dispatcher->dispatch(e);
         std::cout <<"got event procs : "<< ep.size() << std::endl;
-        //  MTContext* ctx = this->table.GetVal(e->flow_id);
+        MTContext* ctx = this->ctx_table[e->flowId];
+        if(!ctx){
+            std::cout <<"no ctx yet"<< std::endl;
+            ctx = InitContext(e->flowId);
+        }
 
-        //  std::vector<MTEvent*> newEvents;
-        //  MTContext* context;
-        //  std::vector<Packet> packetToSend;
+         std::vector<MTEvent*> newEvents;
+         std::vector<Packet> packetToSend;
 
         //  // intermediate output for the chain of processors
         //  IntermediateOutput* intermOutput;
