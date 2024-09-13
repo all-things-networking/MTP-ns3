@@ -37,25 +37,25 @@ vector<MTEvent*> SendProcessor::own_Process(SEND_EVENT& ev, myContext& ctx, inte
 	ctx.sent_count = ctx.sent_count + 1;
 	return events;
 }
-// RecvProcessor::RecvProcessor(){}
-// RecvProcessor::~RecvProcessor(){}
-// EventProcessorOutput* RecvProcessor::process (MTEvent* e, EventProcessorOutput* epOut) {
-// 	RECV_EVENT ev = *(RECV_EVENT*)e;
-// 	myContext ctx = *(myContext*)epOut->ctx;
-// 	interm_out out = *(interm_out*)e;
-// 	own_Process(ev, ctx, out);
-// 	EventProcessorOutput* epOutput = new EventProcessorOutput();
-// 	epOutput->ctx = new myContext(ctx);
-// 	return epOutput;
-// }
-// bool RecvProcessor::IsValidEvent(MTEvent* e) {return true};
-// void RecvProcessor::own_Process(RECV_EVENT& ev, myContext& ctx, interm_out& out)
-// {
-// 	vector<event_t> events;
-// 	FB_EVENT fb_ev(ev.flow_id,10);
-// 	fb_ev.transit_addr = ev.transit_addr;
-// 	fb_ev.transit_length = ev.transit_length;
-// 	events.emplace_back( fb_ev );
-// 	ctx.recv_count = ctx.recv_count + 1;
-// 	return events
-// }
+RecvProcessor::RecvProcessor(){}
+RecvProcessor::~RecvProcessor(){}
+EventProcessorOutput* RecvProcessor::process (MTEvent* e, EventProcessorOutput* epOut) {
+	RECV_EVENT ev = *(RECV_EVENT*)e;
+	myContext ctx = *(myContext*)epOut->ctx;
+	interm_out out = *(interm_out*)e;
+	EventProcessorOutput* epOutput = new EventProcessorOutput();
+	epOutput->events = own_Process(ev, ctx, out);
+	epOutput->ctx = new myContext(ctx);
+	return epOutput;
+}
+bool RecvProcessor::IsValidEvent(MTEvent* e) {return true;};
+vector<MTEvent*> RecvProcessor::own_Process(RECV_EVENT& ev, myContext& ctx, interm_out& out)
+{
+	vector<MTEvent*> events;
+	FB_EVENT* fb_ev = new FB_EVENT(ev.flowId,10);
+	fb_ev->transit_addr = ev.transit_addr;
+	fb_ev->transit_length = ev.transit_length;
+	events.emplace_back( fb_ev );
+	ctx.recv_count = ctx.recv_count + 1;
+	return events;
+}

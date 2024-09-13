@@ -19,14 +19,14 @@ class SendProcessor: public ns3::MTEventProcessor
 	bool isValidEvent(ns3::MTEvent* e)override;
 	vector<MTEvent*> own_Process (SEND_EVENT& ev , myContext& ctx , interm_out& out);
 };
-// class RecvProcessor: public MTEventProcessor
-// { 
-//  public:
-// 	RecvProcessor();
-// 	~RecvProcessor();
-// 	EventProcessorOutput* process (MTEvent* e, EventProcessorOutput* epOut);
-// 	bool IsValidEvent(MTEvent* e);
-// 	EventProcessorOutput* own_Process (RECV_EVENT ev , myContext ctx , interm_out out);
-// };
+class RecvProcessor: public MTEventProcessor
+{ 
+ public:
+	RecvProcessor();
+	~RecvProcessor();
+	EventProcessorOutput* process (MTEvent* e, EventProcessorOutput* epOut);
+	bool IsValidEvent(MTEvent* e);
+	vector<MTEvent*> own_Process (RECV_EVENT& ev , myContext& ctx , interm_out& out);
+};
 
 #endif
