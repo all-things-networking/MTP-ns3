@@ -19,7 +19,7 @@ namespace ns3 {
 
   flow_id MTScheduler::next_flow() {
     auto it = flowMap.begin();
-    for (int i = 0; i < flowSelector; i++) {
+    for (unsigned int i = 0; i < flowSelector; i++) {
       it++;
     }
     flowSelector++;

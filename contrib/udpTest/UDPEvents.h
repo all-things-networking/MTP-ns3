@@ -2,6 +2,7 @@
 #define EVENTS_H
 
 #include"ns3/mt-event.h"
+#include"UDPHeaders.h"
 
 class SEND_EVENT : public ns3::MTEvent
 {
@@ -26,7 +27,7 @@ public:
 class PKT_EVENT : public ns3::MTEvent
 {
 public: 
-	//UDPHeader udp;
+	UDPHeader udp;
 	char addr;
 	int length;
 	PKT_EVENT(long time, int flow_id)

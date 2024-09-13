@@ -1,4 +1,5 @@
 #include "UDPEventProcs.h"
+#include "UDPHeaders.h"
 
 SendProcessor::SendProcessor(){}
 SendProcessor::~SendProcessor(){}
@@ -26,11 +27,11 @@ vector<MTEvent*> SendProcessor::own_Process(SEND_EVENT& ev, myContext& ctx, inte
 			data_len = ev.length - index;
 		}
 		pkt_ev->length = data_len;
-		//UDPHeader udp;
-		//udp.src_port = ctx.src_port;
-		//udp.dst_port = ctx.dst_port;
-		//udp.length = udp.size(  ) + data_len;
-		//pkt_ev.udp = udp;
+		UDPHeader udp;
+		udp.src_port = ctx.src_port;
+		udp.dst_port = ctx.dst_port;
+		udp.length = sizeof(udp) + data_len;
+		pkt_ev->udp = udp;
 		events.emplace_back( pkt_ev );
 	}
 	ctx.sent_count = ctx.sent_count + 1;
