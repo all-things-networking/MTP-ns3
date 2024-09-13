@@ -15,6 +15,7 @@ build_lib(
     SOURCE_FILES MTUDP.cc
                  UDPRXApp.cc
                  UDPDispatcher.cc
+                 UDPEventProcs.cc
     HEADER_FILES MTUDP.h
                  UDPRXApp.h
                  UDPEvents.h

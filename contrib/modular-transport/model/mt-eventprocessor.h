@@ -15,8 +15,6 @@ class Packet;
 struct EventProcessorOutput {
     std::vector<MTEvent*> events;
     MTContext* ctx;
-    std::vector<Packet> packets;
-    // TODO: Add tx_module
     MTIntermediateOutput* intermOutput;
  };
  

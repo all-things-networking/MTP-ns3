@@ -9,5 +9,5 @@ class myContext: public MTContext
 		int dst_port;
 		int sent_count;
 		int recv_count;
-		int MTU;
+		int MTU=3;
 };

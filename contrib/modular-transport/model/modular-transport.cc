@@ -75,31 +75,31 @@ void ModularTransport::Mainloop(){
         }
 
          std::vector<MTEvent*> newEvents;
-         std::vector<Packet> packetToSend;
 
-        EventProcessorOutput* epout = new EventProcessorOutput{newEvents, ctx, packetToSend, interm_output};
+        EventProcessorOutput* epout = new EventProcessorOutput{newEvents, ctx, interm_output};
 
         //  // run through all processors
-        //  for (auto processor : ep) 
-        //  {
-        //     epout = processor->Process(e, epout);
-        //  }
+         for (auto processor : ep) 
+         {
+            std::cout <<"entering eventproc: "<<typeid(processor).name()<< std::endl;
+            epout = processor->process(e, epout);
+         }
 
-        //  for (auto newEvent : epout->newEvents)
-        //  {
-        //         scheduler->AddEvent(newEvent);
-        //  }
-        
-        //  for (auto packet : epout->packetToSend)
-        //  {
-        //         //recreate Header for outgoing
-        //         std::cout << "Sending Packets out" << std::endl;
-        //         this->SendPacket(&packet, ctx->saddr, ctx->daddr);
-        //  }
+         for (auto newEvent : epout->events)
+         {
+            switch (newEvent->subtype){
+                case PROG_EVENT:
+                    scheduler->enqueue_event(e->flowId,newEvent);
+                    break;
+                case NET_EVENT:
+                    std::cout <<"sending out a packet "<< std::endl;
+                    break;
+                default:
+                    std::cout <<"event type unsupported "<< std::endl;
+                    break;
+            }      
+         }
 
-
-        //  //Use rult's mtcontext to update table's context at id
-        //  //addall every thing in first vector of result into schedular
     }
 }
 void
