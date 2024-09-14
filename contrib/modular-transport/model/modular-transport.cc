@@ -38,7 +38,7 @@ void ModularTransport::ReceiveAppMessage(
                              const Ipv4Address& saddr,
                              const Ipv4Address& daddr){
     MTEvent* ev = rxapp->request_parser(ns3::app_msg_t());
-    std::cout <<"created the send event."<< ev->time << std::endl;
+    std::cout <<"created the send event for flow "<< ev->flowId << std::endl;
     scheduler->enqueue_event(ev->flowId,ev);
     Mainloop();
 }
@@ -62,7 +62,6 @@ void ModularTransport::Mainloop(){
     // This is the main loop of the transport layer
        // that calls the different components of our model
        // to process events
-    std::cout << "Sending Packets out" << std::endl;
     while (!this->scheduler->is_empty()){
         MTEvent* e = this->scheduler->get_next_event();
         std::cout <<"got event."<< e->time << std::endl;

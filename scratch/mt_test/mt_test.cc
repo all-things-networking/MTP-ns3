@@ -118,6 +118,9 @@ main (int argc, char *argv[])
   Ptr<MTUDP> transport = src->GetObject<MTUDP>();
   //Simulator::Schedule(Seconds(1), &ModularTransport::SendPacket, transport, packet, mth, saddr, daddr);
   Simulator::Schedule(Seconds(1), &MTUDP::ReceiveAppMessage, transport, saddr, daddr);
+  Simulator::Schedule(Seconds(2), &MTUDP::ReceiveAppMessage, transport, saddr, daddr);
+  Simulator::Schedule(Seconds(2), &MTUDP::ReceiveAppMessage, transport, saddr, daddr);
+
 
   Simulator::Run ();
   Simulator::Destroy ();

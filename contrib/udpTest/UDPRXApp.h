@@ -5,6 +5,7 @@
 
 class UDPRXAppParser: public ns3::MTRXAppParser {
     public:
+      int id=1;
       UDPRXAppParser(){}
       ~UDPRXAppParser(){}
       ns3::MTEvent* request_parser(ns3::app_msg_t request);
