@@ -48,7 +48,7 @@ EventProcessorOutput* RecvProcessor::process (MTEvent* e, EventProcessorOutput* 
 	epOutput->ctx = new myContext(ctx);
 	return epOutput;
 }
-bool RecvProcessor::IsValidEvent(MTEvent* e) {return true;};
+bool RecvProcessor::isValidEvent(MTEvent* e) {return true;};
 vector<MTEvent*> RecvProcessor::own_Process(RECV_EVENT& ev, myContext& ctx, interm_out& out)
 {
 	vector<MTEvent*> events;

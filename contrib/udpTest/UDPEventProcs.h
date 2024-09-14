@@ -25,7 +25,7 @@ class RecvProcessor: public MTEventProcessor
 	RecvProcessor();
 	~RecvProcessor();
 	EventProcessorOutput* process (MTEvent* e, EventProcessorOutput* epOut);
-	bool IsValidEvent(MTEvent* e);
+	bool isValidEvent(MTEvent* e)override;
 	vector<MTEvent*> own_Process (RECV_EVENT& ev , myContext& ctx , interm_out& out);
 };
 
