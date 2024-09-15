@@ -14,7 +14,7 @@ sudo apt install build-essential cmake -y
 # Setup ns-3
 print "Setting up ns-3"
 cp examples/tutorial/first.cc scratch/first-copy.cc
-./ns3 configure --enable-modules core,network,internet,applications,point-to-point,modular-transport
+./ns3 configure --enable-modules core,network,internet,applications,point-to-point,modular-transport,udpTest
 ./ns3 build
 
 # Tests

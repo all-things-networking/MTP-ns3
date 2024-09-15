@@ -10,6 +10,7 @@ EventProcessorOutput* SendProcessor::process (MTEvent* e, EventProcessorOutput* 
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	epOutput->events = own_Process(ev, ctx, out);
 	epOutput->ctx = new myContext(ctx);
+	epOutput->intermOutput = new interm_out(out);
 	return epOutput;
 }
 bool SendProcessor::isValidEvent(MTEvent* e) {return true;};
@@ -46,6 +47,7 @@ EventProcessorOutput* RecvProcessor::process (MTEvent* e, EventProcessorOutput* 
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	epOutput->events = own_Process(ev, ctx, out);
 	epOutput->ctx = new myContext(ctx);
+	epOutput->intermOutput = new interm_out(out);
 	return epOutput;
 }
 bool RecvProcessor::isValidEvent(MTEvent* e) {return true;};
