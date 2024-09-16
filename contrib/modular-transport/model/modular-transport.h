@@ -3,6 +3,7 @@
 #define MODULAR_TRANSPORT_H
 
 #include "mt-rxapp.h"
+#include "mt-txnet.h"
 #include "mt-scheduler.h"
 #include "mt-dispatcher.h"
 #include "mt-context.h"
@@ -115,6 +116,7 @@ class ModularTransport: public IpL4Protocol
      */
     void NotifyNewAggregate() override;
     MTRXAppParser* rxapp;
+    MTTXNetScheduler* txnet;
     MTScheduler* scheduler;
     MTDispatcher* dispatcher;
     MTIntermediateOutput* interm_output;

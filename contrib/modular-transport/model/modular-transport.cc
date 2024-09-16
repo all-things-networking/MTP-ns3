@@ -34,14 +34,21 @@ ModularTransport::~ModularTransport()
     NS_LOG_FUNCTION(this);
 }
 
+Ipv4Address cursaddr;//remove these after figuring out how to map flow_id and these info
+Ipv4Address curdaddr;
+
 void ModularTransport::ReceiveAppMessage(
                              const Ipv4Address& saddr,
                              const Ipv4Address& daddr){
+    cursaddr = saddr;
+    curdaddr = daddr;
     MTEvent* ev = rxapp->request_parser(ns3::app_msg_t());
     //std::cout <<"created the send event for flow "<< ev->flowId << std::endl;
     scheduler->enqueue_event(ev->flowId,ev);
     Mainloop();
 }
+
+
 
 void ModularTransport::ReceiveNetPacket(
                              const Ipv4Address& saddr,
@@ -98,6 +105,7 @@ void ModularTransport::Mainloop(){
                     scheduler->enqueue_event(e->flowId,newEvent);
                     break;
                 case NET_EVENT:
+                    SendPacket(txnet->get_next_packet(newEvent),cursaddr,curdaddr);
                     std::cout <<"sending out a packet "<< std::endl;
                     break;
                 default:

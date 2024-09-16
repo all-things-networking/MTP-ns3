@@ -14,10 +14,12 @@ build_lib(
     LIBNAME tcpTest
     SOURCE_FILES MTTCP.cc
                  TCPRXApp.cc
+                 TCPTXNet.cc
                  TCPDispatcher.cc
                  TCPEventProcs.cc
     HEADER_FILES MTTCP.h
                  TCPRXApp.h
+                 TCPTXNet.h
                  TCPEvents.h
                  TCPEventProcs.h
                  TCPDispatcher.h
