@@ -1,5 +1,13 @@
 #include "TCPEventProcs.h"
 
+/*
+Compiler Fixes: 
+ - add header.cc and all its contents.
+ - fix header.h
+ - change the epOutput->events = own_Process(ev, ctx, int_out); to append instead.
+
+*/
+
 send_ep::send_ep(){}
 send_ep::~send_ep(){}
 EventProcessorOutput* send_ep::process (MTEvent* e, EventProcessorOutput* epOut) {
@@ -7,7 +15,11 @@ EventProcessorOutput* send_ep::process (MTEvent* e, EventProcessorOutput* epOut)
 	tcp_context ctx = *(tcp_context*)epOut->ctx;
 	interm_out int_out = *(interm_out*)epOut->intermOutput;
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
-	epOutput->events = own_Process(ev, ctx, int_out);
+	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
+	epOutput->events = epOut->events;
+	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
+	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -81,7 +93,11 @@ EventProcessorOutput* rto_ep::process (MTEvent* e, EventProcessorOutput* epOut) 
 	tcp_context ctx = *(tcp_context*)epOut->ctx;
 	interm_out int_out = *(interm_out*)epOut->intermOutput;
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
-	epOutput->events = own_Process(ev, ctx, int_out);
+	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
+	epOutput->events = epOut->events;
+	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
+	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -132,7 +148,11 @@ EventProcessorOutput* fast_retr_rec_ep::process (MTEvent* e, EventProcessorOutpu
 	tcp_context ctx = *(tcp_context*)epOut->ctx;
 	interm_out int_out = *(interm_out*)epOut->intermOutput;
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
-	epOutput->events = own_Process(ev, ctx, int_out);
+	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
+	epOutput->events = epOut->events;
+	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
+	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -191,7 +211,11 @@ EventProcessorOutput* slows_congc_ep::process (MTEvent* e, EventProcessorOutput*
 	tcp_context ctx = *(tcp_context*)epOut->ctx;
 	interm_out int_out = *(interm_out*)epOut->intermOutput;
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
-	epOutput->events = own_Process(ev, ctx, int_out);
+	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
+	epOutput->events = epOut->events;
+	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
+	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -229,7 +253,11 @@ EventProcessorOutput* ack_net_ep::process (MTEvent* e, EventProcessorOutput* epO
 	tcp_context ctx = *(tcp_context*)epOut->ctx;
 	interm_out int_out = *(interm_out*)epOut->intermOutput;
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
-	epOutput->events = own_Process(ev, ctx, int_out);
+	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
+	epOutput->events = epOut->events;
+	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
+	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -316,11 +344,11 @@ vector<MTEvent*> ack_net_ep::own_Process(ACK& ev, tcp_context& ctx, interm_out& 
 		events.emplace_back( pkt_ev );
 		ctx.send_next = ctx.send_next + pkt_data_len;
 	}
-	//ctx.ack_timeout.stop(  );
+	ctx.ack_timeout.stop(  );
 	MISS_ACK* time_ev = new MISS_ACK(ev.flowId,10);
 	time_ev->seq_num = ctx.send_una;
-	//ctx.ack_timeout.set_duration( ctx.RTO);
-	//ctx.ack_timeout.start( time_ev );
+	ctx.ack_timeout.set_duration( ctx.RTO);
+	ctx.ack_timeout.start( time_ev );
 	return events;
 }
 data_net_ep::data_net_ep(){}
@@ -330,7 +358,11 @@ EventProcessorOutput* data_net_ep::process (MTEvent* e, EventProcessorOutput* ep
 	tcp_context ctx = *(tcp_context*)epOut->ctx;
 	interm_out int_out = *(interm_out*)epOut->intermOutput;
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
-	epOutput->events = own_Process(ev, ctx, int_out);
+	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
+	epOutput->events = epOut->events;
+	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
+	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -448,7 +480,11 @@ EventProcessorOutput* send_ack::process (MTEvent* e, EventProcessorOutput* epOut
 	tcp_context ctx = *(tcp_context*)epOut->ctx;
 	interm_out int_out = *(interm_out*)epOut->intermOutput;
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
-	epOutput->events = own_Process(ev, ctx, int_out);
+	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
+	epOutput->events = epOut->events;
+	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
+	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -501,7 +537,11 @@ EventProcessorOutput* app_feedback_ep::process (MTEvent* e, EventProcessorOutput
 	tcp_context ctx = *(tcp_context*)epOut->ctx;
 	interm_out int_out = *(interm_out*)epOut->intermOutput;
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
-	epOutput->events = own_Process(ev, ctx, int_out);
+	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
+	epOutput->events = epOut->events;
+	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
+	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -523,7 +563,11 @@ EventProcessorOutput* ack_timeout_ep::process (MTEvent* e, EventProcessorOutput*
 	tcp_context ctx = *(tcp_context*)epOut->ctx;
 	interm_out int_out = *(interm_out*)epOut->intermOutput;
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
-	epOutput->events = own_Process(ev, ctx, int_out);
+	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
+	epOutput->events = epOut->events;
+	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
+	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
