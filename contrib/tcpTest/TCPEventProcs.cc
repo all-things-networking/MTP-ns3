@@ -439,6 +439,7 @@ vector<MTEvent*> data_net_ep::own_Process(DATA& ev, tcp_context& ctx, interm_out
 			curr_index = ( curr_index + 1 ) % MAX_NUM_CTX_PKT_INFO;
 		}
 	}
+	return vector<MTEvent*>();
 }
 send_ack::send_ack(){}
 send_ack::~send_ack(){}

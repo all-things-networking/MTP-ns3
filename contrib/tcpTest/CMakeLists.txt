@@ -18,6 +18,7 @@ build_lib(
                  TCPRXNet.cc
                  TCPDispatcher.cc
                  TCPEventProcs.cc
+                 TCPHeaders.cc
     HEADER_FILES MTTCP.h
                  TCPRXApp.h
                  TCPTXNet.h

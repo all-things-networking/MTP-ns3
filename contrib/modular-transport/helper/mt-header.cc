@@ -34,7 +34,7 @@ MTHeader::~MTHeader()
 uint32_t
 MTHeader::GetSerializedSize() const
 {
-    return 4;
+    return 6*32;
 }
 
 void

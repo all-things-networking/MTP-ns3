@@ -24,9 +24,9 @@ class MTHeader : public Header {
      */
     friend std::ostream& operator<<(std::ostream& os, const MTHeader& h);
     TypeId GetInstanceTypeId() const override;
-    uint32_t GetSerializedSize() const override;
-    void Serialize(Buffer::Iterator start) const override;
-    uint32_t Deserialize(Buffer::Iterator start) override;
+    virtual uint32_t GetSerializedSize() const override;
+    virtual void Serialize(Buffer::Iterator start) const override;
+    virtual uint32_t Deserialize(Buffer::Iterator start) override;
     void Print(std::ostream& os) const override;
 };
 

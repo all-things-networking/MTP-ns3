@@ -9,4 +9,9 @@ class TCPheader : public ns3::MTHeader
 	int ack_seq;
 	int ack;
 	int window;
+	uint32_t GetSerializedSize() const;
+	void Serialize(ns3::Buffer::Iterator start) const;
+	uint32_t Deserialize(ns3::Buffer::Iterator start);
+	void Print(std::ostream& os) const;
+	ns3::TypeId GetInstanceTypeId() const;
 };
