@@ -15,11 +15,13 @@ build_lib(
     SOURCE_FILES MTTCP.cc
                  TCPRXApp.cc
                  TCPTXNet.cc
+                 TCPRXNet.cc
                  TCPDispatcher.cc
                  TCPEventProcs.cc
     HEADER_FILES MTTCP.h
                  TCPRXApp.h
                  TCPTXNet.h
+                 TCPRXNet.h
                  TCPEvents.h
                  TCPEventProcs.h
                  TCPDispatcher.h

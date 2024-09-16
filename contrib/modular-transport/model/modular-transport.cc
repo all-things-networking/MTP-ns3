@@ -199,6 +199,12 @@ ModularTransport::Receive(Ptr<Packet> packet,
 {
     NS_LOG_FUNCTION(this << packet << incomingIpHeader << incomingInterface);
     NS_LOG_UNCOND("Received packet in ModularTransport");
+    std::vector<MTEvent*> newEvents = rxnet->packet_parser(incomingIpHeader,packet);
+    for(auto newEvent: newEvents){
+        scheduler->enqueue_event(newEvent->flowId,newEvent);
+    }
+    std::cout <<"Handling Packet Receive "<< std::endl;
+    Mainloop();
     return IpL4Protocol::RX_OK;
 }
 

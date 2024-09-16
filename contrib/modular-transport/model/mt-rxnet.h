@@ -4,16 +4,14 @@
 #include "../helper/mtp-types.h"
 #include "ns3/ipv4-header.h"
 #include "mt-scheduler.h"
+#include "ns3/packet.h"
 
 namespace ns3 {
   class MTRXNetParser {
-    MTScheduler * sched;
-
     public:
-      MTRXNetParser(MTScheduler * sched);
-      virtual ~MTRXNetParser();
+      MTRXNetParser(){}
 
-      virtual std::vector<event_t> packet_parser(Ipv4Header iphdr, pkt_t * pkt);
+      virtual std::vector<MTEvent*> packet_parser(Ipv4Header iphdr, Ptr<ns3::Packet> pkt)=0;
   };
 }
 

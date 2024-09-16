@@ -27,6 +27,7 @@ build_lib(
                 model/mt-eventprocessor.h
                 model/mt-context.h
                 model/mt-txnet.h
+                model/mt-rxnet.h
                 helper/mt-header.h
                 helper/mt-timer.h
                 helper/mt-timer-handler.h
