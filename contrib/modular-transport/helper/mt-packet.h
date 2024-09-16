@@ -16,9 +16,16 @@ namespace ns3 {
     public:
       pkt_t();
       ~pkt_t();
+      
+      // length in bytes
       int len();
+
       void add_data(Buffer newData);
+
+      // copies bytesToCopy bytes (ideally pkt_t::len()) from the packet's 
+      // buffer to outputBuffer, which should be preallocated
       void get_data(uint8_t * outputBuffer, int bytesToCopy);
+
       void add_hdr(MTHeader header);
       MTHeader extract_hdr();
   };
