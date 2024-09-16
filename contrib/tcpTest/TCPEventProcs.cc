@@ -70,8 +70,8 @@ vector<MTEvent*> send_ep::own_Process(SEND& ev, tcp_context& ctx, interm_out& in
 	}
 	MISS_ACK* time_ev = new MISS_ACK(ev.flowId,10);
 	time_ev->seq_num = ctx.send_una;
-	//ctx.ack_timeout.set_duration( ctx.RTO );
-	//ctx.ack_timeout.start( time_ev );
+	ctx.ack_timeout.set_duration( ctx.RTO );
+	ctx.ack_timeout.start( time_ev );
 	return events;
 }
 rto_ep::rto_ep(){}
@@ -584,5 +584,6 @@ vector<MTEvent*> ack_timeout_ep::own_Process(MISS_ACK& ev, tcp_context& ctx, int
 	pkt_ev->ack_num = ctx.recv_next;
 	pkt_ev->wnd_size = ctx.rwnd_size;
 	events.emplace_back( pkt_ev );
-	//ctx.ack_timeout.restart( ctx.RTO );
+	ctx.ack_timeout.restart( ctx.RTO );
+	return events;
 }

@@ -21,6 +21,7 @@
 #include "ns3/traffic-control-layer.h"
 #include "ns3/modular-transport.h"
 #include "ns3/MTTCP.h"
+#include "ns3/mt-timer-handler.h"
 
 using namespace ns3;
 
@@ -116,10 +117,13 @@ main (int argc, char *argv[])
   //MTHeader mth;
   //mth.SetF1(2);
   Ptr<MTTCP> transport = src->GetObject<MTTCP>();
+
+  MTTimerHandler* mth = MTTimerHandler::getInstance(GetPointer(transport));
+
   //Simulator::Schedule(Seconds(1), &ModularTransport::SendPacket, transport, packet, mth, saddr, daddr);
   Simulator::Schedule(Seconds(1), &MTTCP::ReceiveAppMessage, transport, saddr, daddr);
   Simulator::Schedule(Seconds(2), &MTTCP::ReceiveAppMessage, transport, saddr, daddr);
-  Simulator::Schedule(Seconds(2), &MTTCP::ReceiveAppMessage, transport, saddr, daddr);
+  Simulator::Schedule(Seconds(200), &MTTCP::ReceiveAppMessage, transport, saddr, daddr);
 
 
   Simulator::Run ();

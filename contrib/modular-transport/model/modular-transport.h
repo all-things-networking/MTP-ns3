@@ -61,10 +61,11 @@ class ModularTransport: public IpL4Protocol
      * \param saddr The source Ipv4Address
      * \param daddr The destination Ipv4Address
      */
-    // void SendPacket(Ptr<Packet> pkt,
-    //                 const MTHeader& outgoing,
-    //                 const Ipv4Address& saddr,
-    //                 const Ipv4Address& daddr) const; 
+    void SendPacket(Ptr<Packet> pkt,
+                    const Ipv4Address& saddr,
+                    const Ipv4Address& daddr) const; 
+
+    void HandleTimeout(MTEvent* ev);
 
     // From IpL4Protocol
     enum IpL4Protocol::RxStatus Receive(Ptr<Packet> p,

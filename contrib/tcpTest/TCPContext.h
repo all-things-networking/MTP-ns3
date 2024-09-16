@@ -2,6 +2,8 @@ using namespace std;
 using namespace ns3;
 #include <vector>
 #include "TCPStructs.h"
+#include "ns3/mt-timer.h"
+
 class tcp_context :public MTContext
 {
 	public:
@@ -23,7 +25,7 @@ class tcp_context :public MTContext
 	vector<sent_pkt_info> data_recv_info_array;
 	int data_recv_array_head = 0;
 	int data_recv_array_tail = 0;
-	//timer_t ack_timeout;
+	MTTimer ack_timeout;
 	char read_from_addr;
 	char write_to_addr;
 };

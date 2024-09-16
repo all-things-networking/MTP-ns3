@@ -38,7 +38,7 @@ void ModularTransport::ReceiveAppMessage(
                              const Ipv4Address& saddr,
                              const Ipv4Address& daddr){
     MTEvent* ev = rxapp->request_parser(ns3::app_msg_t());
-    std::cout <<"created the send event for flow "<< ev->flowId << std::endl;
+    //std::cout <<"created the send event for flow "<< ev->flowId << std::endl;
     scheduler->enqueue_event(ev->flowId,ev);
     Mainloop();
 }
@@ -48,6 +48,12 @@ void ModularTransport::ReceiveNetPacket(
                              const Ipv4Address& daddr/*,
                              MTContext* StartContext*/){
 
+    Mainloop();
+}
+
+void ModularTransport::HandleTimeout(MTEvent* ev){
+    
+    scheduler->enqueue_event(ev->flowId,ev);
     Mainloop();
 }
 
@@ -78,6 +84,7 @@ void ModularTransport::Mainloop(){
         EventProcessorOutput* epout = new EventProcessorOutput{newEvents, ctx, interm_output};
 
         //  // run through all processors
+        //if(e->subtype!=TIMER_EVENT)
          for (auto processor : ep) 
          {
             std::cout <<"MainLoop: Entering Eventproc: "<<typeid(*processor).name()<< std::endl;
@@ -144,44 +151,38 @@ ModularTransport::NotifyNewAggregate()
     IpL4Protocol::NotifyNewAggregate();
 }
 
-//void
-// ModularTransport::SendPacket(Ptr<Packet> packet,
-//                              const MTHeader& outgoing,
-//                              const Ipv4Address& saddr,
-//                              const Ipv4Address& daddr) const
-// {
-//     NS_LOG_FUNCTION(this << packet << saddr << daddr);
-//     // TODO:Use NS_LOG_LOGIC to record information about the segment/packet being sent out.
-
-//     MTHeader outgoingHeader = outgoing;
-   
-//     packet->AddHeader(outgoingHeader);
-
-//     Ptr<Ipv4> ipv4 = m_node->GetObject<Ipv4>();
-//     if (ipv4)
-//     {
-//         Ipv4Header header;
-//         header.SetSource(saddr);
-//         header.SetDestination(daddr);
-//         header.SetProtocol(PROT_NUMBER);
-//         Socket::SocketErrno errno_;
-//         Ptr<Ipv4Route> route;
-//         if (ipv4->GetRoutingProtocol())
-//         {
-//             route = ipv4->GetRoutingProtocol()->RouteOutput(packet, header, nullptr, errno_);
-//         }
-//         else
-//         {
-//             NS_LOG_ERROR("No IPV4 Routing Protocol");
-//             route = nullptr;
-//         }
-//         m_downTarget(packet, saddr, daddr, PROT_NUMBER, route);
-//     }
-//     else
-//     {
-//         NS_FATAL_ERROR("Trying to use ModularTransport on a node without an Ipv4 interface");
-//     }
-// }
+void
+ModularTransport::SendPacket(Ptr<Packet> packet,
+                             const Ipv4Address& saddr,
+                             const Ipv4Address& daddr) const
+{
+    NS_LOG_FUNCTION(this << packet << saddr << daddr);
+    // TODO:Use NS_LOG_LOGIC to record information about the segment/packet being sent out.
+    Ptr<Ipv4> ipv4 = m_node->GetObject<Ipv4>();
+    if (ipv4)
+    {
+        Ipv4Header header;
+        header.SetSource(saddr);
+        header.SetDestination(daddr);
+        header.SetProtocol(PROT_NUMBER);
+        Socket::SocketErrno errno_;
+        Ptr<Ipv4Route> route;
+        if (ipv4->GetRoutingProtocol())
+        {
+            route = ipv4->GetRoutingProtocol()->RouteOutput(packet, header, nullptr, errno_);
+        }
+        else
+        {
+            NS_LOG_ERROR("No IPV4 Routing Protocol");
+            route = nullptr;
+        }
+        m_downTarget(packet, saddr, daddr, PROT_NUMBER, route);
+    }
+    else
+    {
+        NS_FATAL_ERROR("Trying to use ModularTransport on a node without an Ipv4 interface");
+    }
+}
 
 enum IpL4Protocol::RxStatus
 ModularTransport::Receive(Ptr<Packet> packet,

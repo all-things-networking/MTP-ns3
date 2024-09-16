@@ -16,6 +16,8 @@ build_lib(
                 model/mt-event.cc
                 model/mt-scheduler.cc
                 helper/mt-header.cc
+                helper/mt-timer.cc
+                helper/mt-timer-handler.cc
     HEADER_FILES model/modular-transport.h
                 helper/mtp-types.h
                 model/mt-rxapp.h
@@ -25,6 +27,8 @@ build_lib(
                 model/mt-eventprocessor.h
                 model/mt-context.h
                 helper/mt-header.h
+                helper/mt-timer.h
+                helper/mt-timer-handler.h
     LIBRARIES_TO_LINK ${libinternet}
     TEST_SOURCES test/modular-transport-test-suite.cc
                  ${examples_as_tests_sources}

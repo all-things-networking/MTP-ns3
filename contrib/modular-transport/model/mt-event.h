@@ -45,6 +45,20 @@ class MTEvent {
         virtual void getType(){}
 };
 
+class EMPTY_EVENT : public ns3::MTEvent
+{
+public: 
+	int seq_num;
+	int data_len;
+	bool ack_flag;
+	int ack_num;
+	int wnd_size;
+	EMPTY_EVENT()
+	:ns3::MTEvent(ns3::EventType::NONE, ns3::EventSubtype::ERROR_EVENT, 0,0)
+	{}
+	void getType()override{}
+};
+
 // class MemEvent : public MTEvent {
 //     public:
 //         int32_t atomic_op;
