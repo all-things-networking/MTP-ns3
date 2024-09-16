@@ -98,6 +98,8 @@ void ModularTransport::Mainloop(){
             epout = processor->process(e, epout);
          }
 
+         this->ctx_table[e->flowId] = epout->ctx;
+
          for (auto newEvent : epout->events)
          {
             switch (newEvent->subtype){

@@ -13,9 +13,9 @@ Ptr<Packet> TCPTXNet::get_next_packet(MTEvent* event){
   hdr.src_port = 1;
   hdr.dest_port =2;
   hdr.seq = pkt_ev->seq_num;
-  hdr.ack = (pkt_ev->ack_flag)?pkt_ev->ack_num:0;
+  hdr.ack = pkt_ev->ack_flag;
   std::cout <<"Creating Packet With ack num= "<<hdr.ack<< std::endl;
-  hdr.ack_seq = 0;
+  hdr.ack_seq = (pkt_ev->ack_flag)?pkt_ev->ack_num:0;
   hdr.window = pkt_ev->wnd_size;
   Packet* pkt = new Packet;
   pkt->AddHeader(hdr);

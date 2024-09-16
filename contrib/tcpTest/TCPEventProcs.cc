@@ -276,7 +276,7 @@ vector<MTEvent*> ack_net_ep::own_Process(ACK& ev, tcp_context& ctx, interm_out& 
 	int data_rest = ctx.data_end - ctx.send_next;
 	if( data_rest == 0 && ev.ack_seq == ctx.send_next )
 	{
-		//ctx.ack_timeout.stop(  );
+		ctx.ack_timeout.stop(  );
 		return events;
 	}
 	int effective_window = ctx.cwnd_size;
