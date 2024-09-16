@@ -14,7 +14,7 @@ namespace ns3 {
 
   void MTScheduler::enqueue_event(flow_id id, MTEvent * event) {
     flowMap[id].enqueue_event(event);
-    std::cout <<"added event of type "<<event->subtype<<" for flow "<<event->flowId<< std::endl;
+    //std::cout <<"added event of type "<<event->subtype<<" for flow "<<event->flowId<< std::endl;
   }
 
   flow_id MTScheduler::next_flow() {
@@ -38,26 +38,26 @@ namespace ns3 {
   }
 
   MTEvent * MTScheduler::get_next_event() {
-    std::cout <<"Looking for next event"<< std::endl;
+    //std::cout <<"Looking for next event"<< std::endl;
     flow_id id;
     do{
       id = this->next_flow();
-      std::cout <<"Looking at flow id "<<id<< std::endl;
+      //std::cout <<"Looking at flow id "<<id<< std::endl;
     }while(flowMap[id].is_empty());
-    std::cout <<"found an event at flow_id "<<id<< std::endl;
+    //std::cout <<"found an event at flow_id "<<id<< std::endl;
     MTEvent * event = this->next_event(id);
     return event;
   }
 
   bool MTScheduler::is_empty(){
-    std::cout <<"checking for pending events."<< std::endl;
+    std::cout <<"Scheduler: Checking For Pending Events."<< std::endl;
     for (auto it = flowMap.begin(); it != flowMap.end(); it++) {
       if(!it->second.is_empty()){
-        std::cout <<"found non empty event_queue for flow "<<it->first<< std::endl;
+        //std::cout <<"found non empty event_queue for flow "<<it->first<< std::endl;
         return false;
       }
     }
-    std::cout <<"No Pending events"<< std::endl;
+    std::cout <<"Scheduler: No Pending Events"<< std::endl;
     return true;
   }
 

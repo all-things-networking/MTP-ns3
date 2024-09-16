@@ -64,12 +64,12 @@ void ModularTransport::Mainloop(){
        // to process events
     while (!this->scheduler->is_empty()){
         MTEvent* e = this->scheduler->get_next_event();
-        std::cout <<"got event."<< e->time << std::endl;
+        std::cout <<"Main Loop: Currently Processing Event "<< typeid(*e).name() << std::endl;
         std::vector<MTEventProcessor*> ep= this->dispatcher->dispatch(e);
-        std::cout <<"got event procs : "<< ep.size() << std::endl;
+        //std::cout <<"got event procs : "<< ep.size() << std::endl;
         MTContext* ctx = this->ctx_table[e->flowId];
         if(!ctx){
-            std::cout <<"no ctx yet"<< std::endl;
+            std::cout <<"Main Loop: Creating New Context For Flow Id "<<e->flowId<< std::endl;
             ctx = InitContext(e->flowId);
         }
 
@@ -80,7 +80,7 @@ void ModularTransport::Mainloop(){
         //  // run through all processors
          for (auto processor : ep) 
          {
-            std::cout <<"entering eventproc: "<<typeid(processor).name()<< std::endl;
+            std::cout <<"MainLoop: Entering Eventproc: "<<typeid(*processor).name()<< std::endl;
             epout = processor->process(e, epout);
          }
 
@@ -98,8 +98,10 @@ void ModularTransport::Mainloop(){
                     break;
             }      
          }
+         std::cout <<"_______________________________________________"<< std::endl;
 
     }
+     std::cout <<"_______________________________________________"<< std::endl;
 }
 void
 ModularTransport::DoDispose()
