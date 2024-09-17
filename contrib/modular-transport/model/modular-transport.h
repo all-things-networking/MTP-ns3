@@ -103,6 +103,7 @@ class ModularTransport: public IpL4Protocol
 
     virtual MTContext* InitContext(flow_id fid){return NULL;}
 
+  virtual void print_debugging_info(){}
   protected:
     void DoDispose() override;
 

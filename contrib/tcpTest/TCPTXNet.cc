@@ -14,10 +14,12 @@ Ptr<Packet> TCPTXNet::get_next_packet(MTEvent* event){
   hdr.dest_port =2;
   hdr.seq = pkt_ev->seq_num;
   hdr.ack = pkt_ev->ack_flag;
-  std::cout <<"Creating Packet With ack num= "<<hdr.ack<< std::endl;
-  hdr.ack_seq = (pkt_ev->ack_flag)?pkt_ev->ack_num:0;
+  std::cout <<"Creating Packet With seq num = "<<((pkt_ev->ack_flag)?pkt_ev->ack_num:pkt_ev->seq_num)<< std::endl;
+
+  hdr.ack_seq = pkt_ev->ack_num;
   hdr.window = pkt_ev->wnd_size;
   Packet* pkt = new Packet;
   pkt->AddHeader(hdr);
+  pkt->AddPaddingAtEnd(pkt_ev->data_len);
   return Ptr<Packet>(pkt);
 }

@@ -11,15 +11,16 @@ std::vector<ns3::MTEvent*> TCPRXNetParser::packet_parser(ns3::Ipv4Header iphdr, 
 
     TCPheader tcphdr;
     GetPointer(pkt)->PeekHeader(tcphdr);
-    std::cout <<"Parsing TCP "<<tcphdr.ack<< std::endl;
         if(tcphdr.ack == 0) {
+            std::cout <<"RX Parser: Parsing Data Packet of Sequence "<<tcphdr.seq<< std::endl;
             DATA *data_ev = new DATA(10,0);
             data_ev->seq_num = tcphdr.seq;
-            data_ev->data_len = GetPointer(pkt)->GetSize();
+            data_ev->data_len = GetPointer(pkt)->GetSize()-tcphdr.GetSerializedSize();
             events.push_back(data_ev);
         }
 
         if(tcphdr.ack == 1) {
+            std::cout <<"RX Parser: Parsing Ack Packet of Sequence "<<tcphdr.ack_seq<< std::endl;
             ACK* ack_ev = new ACK(10,0);
             ack_ev->ack_seq = tcphdr.ack_seq;
             ack_ev->rwnd_size = tcphdr.window;

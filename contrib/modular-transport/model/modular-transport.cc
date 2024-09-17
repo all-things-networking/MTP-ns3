@@ -94,12 +94,10 @@ void ModularTransport::Mainloop(){
         //if(e->subtype!=TIMER_EVENT)
          for (auto processor : ep) 
          {
-            std::cout <<"MainLoop: Entering Eventproc: "<<typeid(*processor).name()<< std::endl;
+            std::cout <<"MainLoop: Entering Eventproc "<<typeid(*processor).name()<< std::endl;
             epout = processor->process(e, epout);
          }
-
          this->ctx_table[e->flowId] = epout->ctx;
-
          for (auto newEvent : epout->events)
          {
             switch (newEvent->subtype){
@@ -205,7 +203,8 @@ ModularTransport::Receive(Ptr<Packet> packet,
     for(auto newEvent: newEvents){
         scheduler->enqueue_event(newEvent->flowId,newEvent);
     }
-    std::cout <<"Handling Packet Receive "<< std::endl;
+    cursaddr = incomingIpHeader.GetDestination();
+    curdaddr = incomingIpHeader.GetSource();
     Mainloop();
     return IpL4Protocol::RX_OK;
 }

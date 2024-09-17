@@ -15,7 +15,7 @@ class ModularTransport;
 class MTContext{
 public:
     MTContext(){}
-    ~MTContext(){}
+    virtual ~MTContext() = default;
 };
 
 } // namespace ns3
