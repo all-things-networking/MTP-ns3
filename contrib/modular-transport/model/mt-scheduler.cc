@@ -50,14 +50,14 @@ namespace ns3 {
   }
 
   bool MTScheduler::is_empty(){
-    std::cout <<"Scheduler: Checking For Pending Events."<< std::endl;
+    //std::cout <<"Scheduler: Checking For Pending Events."<< std::endl;
     for (auto it = flowMap.begin(); it != flowMap.end(); it++) {
       if(!it->second.is_empty()){
         //std::cout <<"found non empty event_queue for flow "<<it->first<< std::endl;
         return false;
       }
     }
-    std::cout <<"Scheduler: No Pending Events"<< std::endl;
+    //std::cout <<"Scheduler: No Pending Events"<< std::endl;
     return true;
   }
 

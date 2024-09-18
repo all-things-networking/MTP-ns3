@@ -17,9 +17,9 @@ EventProcessorOutput* send_ep::process (MTEvent* e, EventProcessorOutput* epOut)
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
 	epOutput->events = epOut->events;
-	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	//cout<<"Adding new events of size: "<<newEvents.size()<<endl;
 	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
-	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
+	//cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -71,7 +71,7 @@ vector<MTEvent*> send_ep::own_Process(SEND& ev, tcp_context& ctx, interm_out& in
 			pkt_data_len = SMSS;
 			bytes_to_send = bytes_to_send - SMSS;
 		}
-		PKT_EVENT* pkt_ev = new PKT_EVENT(ev.flowId,10);
+		PKT_EVENT* pkt_ev = new PKT_EVENT(10,ev.flowId);
 		pkt_ev->seq_num = ctx.send_next;
 		pkt_ev->data_len = pkt_data_len;
 		pkt_ev->ack_flag = 0;
@@ -80,7 +80,7 @@ vector<MTEvent*> send_ep::own_Process(SEND& ev, tcp_context& ctx, interm_out& in
 		events.emplace_back( pkt_ev );
 		ctx.send_next = ctx.send_next + pkt_data_len;
 	}
-	MISS_ACK* time_ev = new MISS_ACK(ev.flowId,10);
+	MISS_ACK* time_ev = new MISS_ACK(10,ev.flowId);
 	time_ev->seq_num = ctx.send_una;
 	ctx.ack_timeout.set_duration( ctx.RTO );
 	ctx.ack_timeout.start( time_ev );
@@ -95,9 +95,9 @@ EventProcessorOutput* rto_ep::process (MTEvent* e, EventProcessorOutput* epOut) 
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
 	epOutput->events = epOut->events;
-	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	//cout<<"Adding new events of size: "<<newEvents.size()<<endl;
 	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
-	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
+	//cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -114,8 +114,8 @@ vector<MTEvent*> rto_ep::own_Process(ACK& ev, tcp_context& ctx, interm_out& int_
 	int granularity_g = 1;
 	if( ctx.first_rto )
 	{
-		ctx.SRTT = 100;
-		ctx.RTTVAR = 100 / 2;
+		ctx.SRTT = 400;
+		ctx.RTTVAR = 400 / 2;
 		if( granularity_g >= 4 * ctx.RTTVAR )
 		{
 			ctx.RTO = ctx.SRTT + granularity_g;
@@ -150,9 +150,9 @@ EventProcessorOutput* fast_retr_rec_ep::process (MTEvent* e, EventProcessorOutpu
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
 	epOutput->events = epOut->events;
-	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	//cout<<"Adding new events of size: "<<newEvents.size()<<endl;
 	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
-	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
+	//cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -186,11 +186,11 @@ vector<MTEvent*> fast_retr_rec_ep::own_Process(ACK& ev, tcp_context& ctx, interm
 			{
 				ctx.ssthresh = opt2;
 			}
-			ctx.cwnd_size = ctx.ssthresh + 3 * SMSS;
+			ctx.cwnd_size = ctx.ssthresh + 1 * SMSS;
 		}
 		if( ctx.duplicate_acks != 3 )
 		{
-			ctx.cwnd_size = ctx.cwnd_size * SMSS;
+			ctx.cwnd_size = ctx.cwnd_size + SMSS;
 		}
 	}
 	else
@@ -213,9 +213,9 @@ EventProcessorOutput* slows_congc_ep::process (MTEvent* e, EventProcessorOutput*
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
 	epOutput->events = epOut->events;
-	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	//cout<<"Adding new events of size: "<<newEvents.size()<<endl;
 	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
-	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
+	//cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -255,9 +255,9 @@ EventProcessorOutput* ack_net_ep::process (MTEvent* e, EventProcessorOutput* epO
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
 	epOutput->events = epOut->events;
-	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	//cout<<"Adding new events of size: "<<newEvents.size()<<endl;
 	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
-	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
+	//cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -292,7 +292,7 @@ vector<MTEvent*> ack_net_ep::own_Process(ACK& ev, tcp_context& ctx, interm_out& 
 		{
 			bytes_to_send = effective_window;
 		}
-		PKT_EVENT* pkt_ev = new PKT_EVENT (ev.flowId,10);
+		PKT_EVENT* pkt_ev = new PKT_EVENT (10,ev.flowId);
 		pkt_ev->seq_num = ctx.send_una;
 		pkt_ev->data_len = bytes_to_send;
 		pkt_ev->ack_flag = 0;
@@ -335,7 +335,7 @@ vector<MTEvent*> ack_net_ep::own_Process(ACK& ev, tcp_context& ctx, interm_out& 
 			pkt_data_len = SMSS;
 			bytes_to_send = bytes_to_send - SMSS;
 		}
-		PKT_EVENT* pkt_ev = new PKT_EVENT(ev.flowId,10);
+		PKT_EVENT* pkt_ev = new PKT_EVENT(10,ev.flowId);
 		pkt_ev->seq_num = ctx.send_next;
 		pkt_ev->data_len = pkt_data_len;
 		pkt_ev->ack_flag = 0;
@@ -345,7 +345,7 @@ vector<MTEvent*> ack_net_ep::own_Process(ACK& ev, tcp_context& ctx, interm_out& 
 		ctx.send_next = ctx.send_next + pkt_data_len;
 	}
 	ctx.ack_timeout.stop(  );
-	MISS_ACK* time_ev = new MISS_ACK(ev.flowId,10);
+	MISS_ACK* time_ev = new MISS_ACK(10,ev.flowId);
 	time_ev->seq_num = ctx.send_una;
 	ctx.ack_timeout.set_duration( ctx.RTO);
 	ctx.ack_timeout.start( time_ev );
@@ -360,9 +360,9 @@ EventProcessorOutput* data_net_ep::process (MTEvent* e, EventProcessorOutput* ep
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
 	epOutput->events = epOut->events;
-	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	//cout<<"Adding new events of size: "<<newEvents.size()<<endl;
 	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
-	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
+	//cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -482,9 +482,9 @@ EventProcessorOutput* send_ack::process (MTEvent* e, EventProcessorOutput* epOut
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
 	epOutput->events = epOut->events;
-	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	//cout<<"Adding new events of size: "<<newEvents.size()<<endl;
 	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
-	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
+	//cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -521,7 +521,7 @@ vector<MTEvent*> send_ack::own_Process(DATA& ev, tcp_context& ctx, interm_out& i
 			bytes_to_send = SMSS;
 		}
 	}
-	PKT_EVENT* pkt_ev = new PKT_EVENT(ev.flowId,10);
+	PKT_EVENT* pkt_ev = new PKT_EVENT(10,ev.flowId);
 	pkt_ev->seq_num = ctx.send_next;
 	pkt_ev->data_len = bytes_to_send;
 	pkt_ev->ack_flag = 1;
@@ -539,9 +539,9 @@ EventProcessorOutput* app_feedback_ep::process (MTEvent* e, EventProcessorOutput
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
 	epOutput->events = epOut->events;
-	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	//cout<<"Adding new events of size: "<<newEvents.size()<<endl;
 	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
-	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
+	//cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -550,7 +550,7 @@ bool app_feedback_ep::isValidEvent(MTEvent* e) {return true;}
 vector<MTEvent*> app_feedback_ep::own_Process(DATA& ev, tcp_context& ctx, interm_out& int_out)
 {
 	vector<MTEvent*> events;
-	FB_EVENT* fb_ev = new FB_EVENT(ev.flowId,10);
+	FB_EVENT* fb_ev = new FB_EVENT(10,ev.flowId);
 	fb_ev->seq_num = ev.seq_num;
 	fb_ev->data_len = ev.data_len;
 	events.emplace_back( fb_ev );
@@ -565,9 +565,9 @@ EventProcessorOutput* ack_timeout_ep::process (MTEvent* e, EventProcessorOutput*
 	EventProcessorOutput* epOutput = new EventProcessorOutput();
 	vector<MTEvent*> newEvents = own_Process(ev, ctx, int_out);
 	epOutput->events = epOut->events;
-	cout<<"Adding new events of size: "<<newEvents.size()<<endl;
+	//cout<<"Adding new events of size: "<<newEvents.size()<<endl;
 	epOutput->events.insert(epOutput->events.end(),newEvents.begin(),newEvents.end());
-	cout<<"Current Events size: "<<epOutput->events.size()<<endl;
+	//cout<<"Current Events size: "<<epOutput->events.size()<<endl;
 	epOutput->ctx = new tcp_context(ctx);
 	epOutput->intermOutput = new interm_out(int_out);
 	return epOutput;
@@ -622,7 +622,7 @@ vector<MTEvent*> ack_timeout_ep::own_Process(MISS_ACK& ev, tcp_context& ctx, int
 	{
 		bytes_to_send = SMSS;
 	}
-	PKT_EVENT* pkt_ev = new PKT_EVENT(ev.flowId,10);
+	PKT_EVENT* pkt_ev = new PKT_EVENT(10,ev.flowId);
 	pkt_ev->seq_num = ctx.send_una;
 	pkt_ev->data_len = bytes_to_send;
 	pkt_ev->ack_flag = 0;

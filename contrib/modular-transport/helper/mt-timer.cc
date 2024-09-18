@@ -9,11 +9,12 @@ void MTTimer::start(MTEvent* event){
     if(isActive()){
         stop();
     }
-    std::cout<<"Timer: Starting With Duration "<<duration<<std::endl;
-    this->event = *event;
-    this->timer = Simulator::Schedule (Seconds(duration),
-                       &MTTimerHandler::triggerTimeout,
-                       MTTimerHandler::getInstance(), event);
+    std::cout<<"Timer: Starting With Duration "<<duration<<"For seq num: "<<event->flowId<<std::endl;
+    // this->event = event;
+    // this->timer = Simulator::Schedule (MilliSeconds(12),
+    //                    &MTTimerHandler::triggerTimeout,
+    //                    MTTimerHandler::getInstance(), event);
+    std::cout<<"Time left til expire = "<<Simulator::GetDelayLeft(this->timer).GetSeconds()<<" Curr timer = "<<Simulator::Now().GetSeconds()<<std::endl;
 }
 
 void MTTimer::stop(){
@@ -25,7 +26,7 @@ void MTTimer::restart(int duration){
     if(isActive()){
         stop();
     }
-    start(new MTEvent(event));//TODO: Fix the problem with multiple timer starts/restarts for the same timer.
+    start(event);//TODO: Fix the problem with multiple timer starts/restarts for the same timer.
 }
 
 void MTTimer::set_duration(int duration){

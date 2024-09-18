@@ -6,7 +6,7 @@ class MTTimer{
     private:
         int duration;
         ns3::EventId timer;
-        ns3::MTEvent event = ns3::EMPTY_EVENT();
+        ns3::MTEvent* event;
     public:
         void start(ns3::MTEvent* event);
         void stop();

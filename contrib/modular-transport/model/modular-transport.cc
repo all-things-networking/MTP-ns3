@@ -114,6 +114,8 @@ void ModularTransport::Mainloop(){
             }      
          }
          std::cout <<"_______________________________________________"<< std::endl;
+         if(ep.size() == 4)
+         print_debugging_info(e->flowId);
 
     }
      std::cout <<"_______________________________________________"<< std::endl;
@@ -198,7 +200,7 @@ ModularTransport::Receive(Ptr<Packet> packet,
                           Ptr<Ipv4Interface> incomingInterface)
 {
     NS_LOG_FUNCTION(this << packet << incomingIpHeader << incomingInterface);
-    NS_LOG_UNCOND("Received packet in ModularTransport");
+    //NS_LOG_UNCOND("Received packet in ModularTransport");
     std::vector<MTEvent*> newEvents = rxnet->packet_parser(incomingIpHeader,packet);
     for(auto newEvent: newEvents){
         scheduler->enqueue_event(newEvent->flowId,newEvent);

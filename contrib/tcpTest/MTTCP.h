@@ -12,7 +12,7 @@ public:
     MTTCP(/* args */);
     ~MTTCP();
     ns3::MTContext* InitContext(flow_id fid)override;
-    void print_debugging_info()override;
+    void print_debugging_info(flow_id fid)override;
 };
 
 #endif

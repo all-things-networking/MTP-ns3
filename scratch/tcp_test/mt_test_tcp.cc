@@ -30,12 +30,16 @@ NS_LOG_COMPONENT_DEFINE ("MTTest");
 int 
 main (int argc, char *argv[])
 {
+  srand (12);
+
   NS_LOG_UNCOND ("Testing Modular Transport");
 
   NodeContainer nodes;
   nodes.Create(2);
   
-  PointToPointHelper p2p;
+  PointToPointHelper p2p;//Use this to set throughput and link_delay
+  p2p.SetChannelAttribute ("Delay", StringValue ("1ms"));
+  p2p.SetDeviceAttribute ("DataRate", StringValue ("100Gbps")); 
   NetDeviceContainer devs = p2p.Install(nodes);
 
   // Install the stack
