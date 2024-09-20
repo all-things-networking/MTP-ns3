@@ -20,7 +20,7 @@
 #include "ns3/ipv4-global-routing-helper.h"
 #include "ns3/traffic-control-layer.h"
 #include "ns3/modular-transport.h"
-#include "ns3/MTTCP.h"
+#include "ns3/MTQUIC.h"
 #include "ns3/mt-timer-handler.h"
 
 using namespace ns3;
@@ -38,7 +38,7 @@ main (int argc, char *argv[])
   nodes.Create(2);
   
   PointToPointHelper p2p;//Use this to set throughput and link_delay
-  p2p.SetChannelAttribute ("Delay", StringValue ("100us"));
+  p2p.SetChannelAttribute ("Delay", StringValue ("200us"));
   p2p.SetDeviceAttribute ("DataRate", StringValue ("100Gbps")); 
   NetDeviceContainer devs = p2p.Install(nodes);
 
@@ -80,7 +80,7 @@ main (int argc, char *argv[])
 
     NS_LOG_UNCOND ("Installing Modular Transport on Node " << node->GetId());
     //Ptr<ModularTransport> transport = CreateObject<ModularTransport>();
-    Ptr<MTTCP> transport = CreateObject<MTTCP>();
+    Ptr<MTQUIC> transport = CreateObject<MTQUIC>();
     node->AggregateObject(transport);
   }
 
@@ -120,14 +120,14 @@ main (int argc, char *argv[])
   Ptr<Packet> packet = Create<Packet> (100);
   //MTHeader mth;
   //mth.SetF1(2);
-  Ptr<MTTCP> transport = src->GetObject<MTTCP>();
+  Ptr<MTQUIC> transport = src->GetObject<MTQUIC>();
 
   MTTimerHandler* mth = MTTimerHandler::getInstance(GetPointer(transport));
 
   //Simulator::Schedule(Seconds(1), &ModularTransport::SendPacket, transport, packet, mth, saddr, daddr);
-  Simulator::Schedule(Seconds(0), &MTTCP::ReceiveAppMessage, transport, saddr, daddr);
-  //Simulator::Schedule(Seconds(2), &MTTCP::ReceiveAppMessage, transport, saddr, daddr);
-  //Simulator::Schedule(Seconds(200), &MTTCP::ReceiveAppMessage, transport, saddr, daddr);
+  Simulator::Schedule(Seconds(1), &MTQUIC::ReceiveAppMessage, transport, saddr, daddr);
+  //Simulator::Schedule(Seconds(2), &MTQUIC::ReceiveAppMessage, transport, saddr, daddr);
+  //Simulator::Schedule(Seconds(200), &MTQUIC::ReceiveAppMessage, transport, saddr, daddr);
 
 
   Simulator::Run ();

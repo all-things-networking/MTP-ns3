@@ -19,12 +19,13 @@ class tcp_context :public MTContext
 	int send_una = 0;
 	int send_next = 0;
 	int data_end = 0;
-	int last_rwnd_size = 16959000;
-	int rwnd_size = 16959000;
+	int last_rwnd_size = 16383;
+	int rwnd_size = 16383;
 	int recv_next = 0;
 	vector<sent_pkt_info> data_recv_info_array = vector<sent_pkt_info>(500);
 	int data_recv_array_head = 0;
 	int data_recv_array_tail = 0;
+	int stage;//remove later
 	MTTimer ack_timeout;
 	char read_from_addr;
 	char write_to_addr;

@@ -14,7 +14,7 @@ std::vector<ns3::MTEvent*> TCPRXNetParser::packet_parser(ns3::Ipv4Header iphdr, 
     TCPheader tcphdr;
     GetPointer(pkt)->PeekHeader(tcphdr);
         if(tcphdr.ack == 0) {
-            if(/*rand()%100>97*/i%100 == 99){
+            if(/*rand()%100>97*/i%100 == 48){
                 std::cout <<"RX Parser: Dropped a Packet. Seq_num = "<<tcphdr.seq<< std::endl;
                 i++;
                 return events;

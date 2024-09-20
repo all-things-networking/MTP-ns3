@@ -97,6 +97,7 @@ void ModularTransport::Mainloop(){
             std::cout <<"MainLoop: Entering Eventproc "<<typeid(*processor).name()<< std::endl;
             epout = processor->process(e, epout);
          }
+         std::cout <<"Done with event provessors "<< std::endl;
          this->ctx_table[e->flowId] = epout->ctx;
          for (auto newEvent : epout->events)
          {

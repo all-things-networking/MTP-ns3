@@ -173,6 +173,7 @@ vector<MTEvent*> fast_retr_rec_ep::own_Process(ACK& ev, tcp_context& ctx, interm
 		if( ctx.duplicate_acks == 1 )
 		{
 			ctx.flightsize_dupl = ctx.send_next - ctx.send_una;
+			cout<<"Information: "<<ctx.flightsize_dupl<<", "<<ctx.send_next<<", "<<ctx.send_una<<endl;
 		}
 		if( ctx.duplicate_acks == 3 )
 		{
@@ -186,10 +187,15 @@ vector<MTEvent*> fast_retr_rec_ep::own_Process(ACK& ev, tcp_context& ctx, interm
 			{
 				ctx.ssthresh = opt2;
 			}
-			ctx.cwnd_size = ctx.ssthresh + 1 * SMSS;
+			ctx.stage = 4;
+			cout<<"Congestion State: 3 Duplicates Detected"<<endl;
+			ctx.cwnd_size = ctx.ssthresh + 3 * SMSS;
 		}
 		if( ctx.duplicate_acks != 3 )
 		{
+			ctx.stage =3;
+			if(ctx.duplicate_acks>3)
+				cout<<"Congestion State: In Inflation"<<endl;
 			ctx.cwnd_size = ctx.cwnd_size + SMSS;
 		}
 	}
@@ -197,6 +203,9 @@ vector<MTEvent*> fast_retr_rec_ep::own_Process(ACK& ev, tcp_context& ctx, interm
 	{
 		if( ctx.duplicate_acks > 0 )
 		{
+			//Deflation
+			ctx.stage = 5;
+			cout<<"Congestion State: In Deflation"<<endl;
 			ctx.cwnd_size = ctx.ssthresh;
 		}
 		ctx.duplicate_acks = 0;
@@ -232,6 +241,9 @@ vector<MTEvent*> slows_congc_ep::own_Process(ACK& ev, tcp_context& ctx, interm_o
 	{
 		if( ctx.cwnd_size < ctx.ssthresh )
 		{
+			//slow start
+			ctx.stage = 0;
+			cout<<"Congestion State: In Slow Start"<<endl;
 			ctx.cwnd_size = ctx.cwnd_size + SMSS;
 		}
 		else
@@ -239,8 +251,11 @@ vector<MTEvent*> slows_congc_ep::own_Process(ACK& ev, tcp_context& ctx, interm_o
 			int add_cwnd = SMSS * SMSS / ctx.cwnd_size;
 			if( add_cwnd == 0 )
 			{
+				//additive icrease
 				add_cwnd = 1;
 			}
+			ctx.stage = 1;
+			cout<<"Congestion State: In Additive Increase"<<endl;
 			ctx.cwnd_size = ctx.cwnd_size + add_cwnd;
 		}
 	}

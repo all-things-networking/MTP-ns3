@@ -34,6 +34,6 @@ void MTTCP::print_debugging_info(flow_id fid){
     ofstream cwndFile("data.csv",std::ios_base::app);
     tcp_context* ctx = (tcp_context*)ctx_table[fid];
     //if(ctx->send_next!=0)
-    cwndFile <<Simulator::Now().GetMilliSeconds()<<","<< ctx->cwnd_size <<","<<ctx->ssthresh<<","<<ctx->duplicate_acks<<endl;
+    cwndFile <<Simulator::Now().GetSeconds()<<" "<< ctx->cwnd_size /*<<","<<ctx->ssthresh<<","<<ctx->duplicate_acks*/<<" "<<ctx->stage<<endl;
 
 }

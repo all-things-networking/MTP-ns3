@@ -10,8 +10,8 @@ void MTTimer::start(MTEvent* event){
         stop();
     }
     std::cout<<"Timer: Starting With Duration "<<duration<<"For seq num: "<<event->flowId<<std::endl;
-    // this->event = event;
-    // this->timer = Simulator::Schedule (MilliSeconds(12),
+    this->event = event;
+    // this->timer = Simulator::Schedule (MilliSeconds(0.6),
     //                    &MTTimerHandler::triggerTimeout,
     //                    MTTimerHandler::getInstance(), event);
     std::cout<<"Time left til expire = "<<Simulator::GetDelayLeft(this->timer).GetSeconds()<<" Curr timer = "<<Simulator::Now().GetSeconds()<<std::endl;
