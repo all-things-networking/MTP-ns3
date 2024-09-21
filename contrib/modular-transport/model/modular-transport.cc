@@ -107,7 +107,7 @@ void ModularTransport::Mainloop(){
                 // will never encounter SendEvents here since no EventProcessor generates them,  
                 //  only the ModularTransport::ReceiveAppEvent function above
             } else if (newEvent->typeString == "PKT") {
-                SendPacket(&txnet->get_next_packet(newEvent, eventFlowId), epout->ctx->src_addr, epout->ctx->dst_addr);
+                SendPacket(&txnet->get_next_packet(newEvent, eventFlowId), cursaddr, curdaddr);
                 std::cout <<"sending out a packet "<< std::endl;
             } else {
                 std::cout <<"event type unsupported "<< std::endl;
