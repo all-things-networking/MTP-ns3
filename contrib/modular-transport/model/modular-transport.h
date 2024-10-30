@@ -121,6 +121,7 @@ class ModularTransport: public IpL4Protocol
     MTRXAppParser* rxapp;
     MTTXNetScheduler* txnet;
     MTRXNetParser* rxnet;
+    MTTXAppScheduler* txapp;
     MTScheduler* scheduler;
     MTDispatcher* dispatcher;
     MTIntermediateOutput* interm_output;

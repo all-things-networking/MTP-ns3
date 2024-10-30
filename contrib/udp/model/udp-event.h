@@ -29,8 +29,8 @@ namespace ns3 {
       Ipv4Address dest_addr;
       Ipv4Address src_addr;
       int length;
-      PktEvent(long time, int flow_id, UDPHeader header, uint8_t * payload, Ipv4Address src_addr, Ipv4Address dest_addr) 
-        : MTEvent(EventType::OUTGOING, EventSubtype::NET_EVENT, time, flow_id, "PKT"),
+      PktEvent(long time, flow_id flowId, UDPHeader header, uint8_t * payload, Ipv4Address src_addr, Ipv4Address dest_addr) 
+        : MTEvent(EventType::OUTGOING, EventSubtype::NET_EVENT, time, flowId, "PKT"),
           header{header}, payload{payload}, src_addr{src_addr}, dest_addr{dest_addr} {}
   };
 

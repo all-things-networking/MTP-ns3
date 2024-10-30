@@ -17,13 +17,12 @@ namespace ns3 {
             ~UDPTXNetScheduler() {}
 
             UDPTXNetScheduler::get_next_event(PktEvent * e, flow_id id) {
-                flowMap[id].enqueue_event(e);
+                flowMap[PktEvent->flowId].enqueue_event(e);
                 PktEvent * poppedEvent = flowMap[id].pop();
                 pkt_t toReturn = pkt_t(poppedEvent->header, poppedEvent->payload, poppedEvent->src_addr, poppedEvent->dest_addr);
                 delete poppedEvent;
                 return toReturn;
             }
-        
     }
 }
 
