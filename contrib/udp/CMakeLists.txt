@@ -11,7 +11,7 @@ if(${ENABLE_EXAMPLES})
 endif()
 
 build_lib(
-    LIBNAME modular-transport
+    LIBNAME udp
     SOURCE_FILES model/udp-dispatcher.cc
                 model/udp-eventprocessor.cc
                 model/udp-mt.cc
