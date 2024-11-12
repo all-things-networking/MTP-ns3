@@ -13,11 +13,33 @@ endif()
 build_lib(
     LIBNAME modular-transport
     SOURCE_FILES model/modular-transport.cc
-                 model/mt-header.cc
-                 helper/modular-transport-helper.cc
+                model/mt-event.cc
+                model/mt-scheduler.cc
+                helper/mt-header.cc
+                helper/mt-list.cc
+                helper/mt-packet.cc
+                helper/mt-queue.cc
+                helper/mt-stream.cc
+                model/mt-context.cc
+                model/mt-dispatcher.cc
     HEADER_FILES model/modular-transport.h
-                 model/mt-header.h
-                 helper/modular-transport-helper.h
+                helper/mtp-types.h
+                helper/mt-flow-id.h
+                helper/mt-header.h
+                helper/mt-list.h
+                helper/mt-packet.h
+                helper/mt-queue.h
+                helper/mt-stream.h
+                model/mt-event.h
+                model/mt-scheduler.h
+                model/mt-dispatcher.h
+                model/mt-eventprocessor.h
+                model/mt-context.h
+                model/mt-rxapp.h
+                model/mt-txapp.h
+                model/mt-txnet.h
+                model/mt-rxnet.h
+                
     LIBRARIES_TO_LINK ${libinternet}
     TEST_SOURCES test/modular-transport-test-suite.cc
                  ${examples_as_tests_sources}
