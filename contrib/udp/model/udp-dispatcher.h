@@ -1,8 +1,8 @@
 #ifndef UDP_DISPATCHER_H
 #define UDP_DISPATCHER_H
 
-#include "../../modular-transport/model/mt-dispatcher.h"
-#include "udp-eventprocessor.h"
+#include "ns3/mt-dispatcher.h"
+#include "ns3/udp-eventprocessor.h"
 
 namespace ns3 {
   class UDPDispatcher : public MTDispatcher {

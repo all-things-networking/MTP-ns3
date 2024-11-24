@@ -3,7 +3,7 @@
 
 using namespace std;
 
-#include "../../modular-transport/model/mt-context.h"
+#include "ns3/mt-context.h"
 
 namespace ns3 {
   class UDPContext: public MTContext {

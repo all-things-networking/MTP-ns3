@@ -1,8 +1,8 @@
 #ifndef UDP_EVENTS_H
 #define UDP_EVENTS_H
 
-#include "../../modular-transport/model/mt-event.h"
-#include "udp-header.h"
+#include "ns3/mt-event.h"
+#include "ns3/udp-header.h"
 
 namespace ns3 {
   // receive data from app
@@ -24,14 +24,14 @@ namespace ns3 {
   // transmit packets to network layer
   class PktEvent : public MTEvent {
     public:
-      UDPHeader header;
+      UdpHeader header;
       uint8_t * payload;
       Ipv4Address dest_addr;
       Ipv4Address src_addr;
       int length;
-      PktEvent(long time, flow_id flowId, UDPHeader header, uint8_t * payload, Ipv4Address src_addr, Ipv4Address dest_addr) 
+      PktEvent(long time, flow_id flowId, UdpHeader header, uint8_t * payload, Ipv4Address src_addr, Ipv4Address dest_addr) 
         : MTEvent(EventType::OUTGOING, EventSubtype::NET_EVENT, time, flowId, "PKT"),
-          header{header}, payload{payload}, src_addr{src_addr}, dest_addr{dest_addr} {}
+          header{header}, payload{payload}, dest_addr{dest_addr}, src_addr{src_addr} {}
   };
 
   // write data back to app - comes after RecvEvent

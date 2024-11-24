@@ -5,16 +5,27 @@
 
 namespace ns3 {
     class UDPTXAppScheduler : public MTTXAppScheduler {
-        UDPTXAppScheduler(ModularTransport *mt, int lower_limit, int upper_limit, bool (*drop_policy)(MTEvent *)) 
-        : MTTXAppScheduler(mt, lower_limit, upper_limit, drop_policy) {}
+        UDPTXAppScheduler(ModularTransport *mt) 
+        : MTTXAppScheduler(mt) {}
 
         void initialize() override {}
+
         flow_id next_feedback() override {
             flow_id id;
             do {
                 id = this->next_flow();
             } while (flowMap[id].is_empty());
+            return id;
         }
+
+        // flow_id next_feedback() override {
+        //     flow_id id;
+        //     auto it = flowMap.begin();
+        //     do {
+        //         it = flowMap.next(it);
+        //     } while (flowMap[it->first].is_empty());
+        //     return it->first;
+        // }
     };  
 }
 

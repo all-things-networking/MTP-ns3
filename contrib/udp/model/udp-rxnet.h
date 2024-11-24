@@ -9,19 +9,19 @@ namespace ns3 {
 
     public:
       UDPRXNetParser(MTScheduler * sched) : sched(sched) {};
-      virtual ~UDPRXNetParser();
+      virtual ~UDPRXNetParser() {}
 
       // question: when we receive a packet, how do we know which flow it belongs to?
-      std::vector<event_t> packet_parser(Ipv4Header iphdr, pkt_t * pkt) override {
+      std::vector<event_t *> packet_parser(Ipv4Header iphdr, pkt_t * pkt) override {
         flow_id fid = 0; // ??
-        std::vector<event_t> events;
+        std::vector<event_t *> events;
         auto now = std::chrono::system_clock::now();
         long timestamp = std::chrono::system_clock::to_time_t(now);
-        events.push_back(new RecvEvent(timestamp, fid));
+        events.push_back((MTEvent *) new RecvEvent(timestamp, fid));
         return events;
       }
       
-  }
+  };
 }
 
 #endif 
