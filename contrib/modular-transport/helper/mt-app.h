@@ -17,12 +17,16 @@ namespace ns3 {
 
       app_msg_t(): size{0}, msg{nullptr}, flow_id{0} {}
       app_msg_t(const app_msg_t& other, int size) : size{size}, msg{msg} {}
-      app_msg_t(uint8_t * other, int size) : msg{other}, size{size} {}
-      app_msg_t(uint8_t * other, int size, int flow_id) : msg{other}, size{size}, flow_id{flow_id} {}
+      app_msg_t(uint8_t * other, int size) : size{size}, msg{other} {}
+      app_msg_t(uint8_t * other, int size, int flow_id) : size{size}, msg{other}, flow_id{flow_id} {}
 
-
-      app_msg_t operator=(const app_msg_t& other) {
-        msg = other.msg;
+      app_msg_t& operator=(const app_msg_t& other) {
+        if (this != &other) {
+          size = other.size;
+          flow_id = other.flow_id;
+          msg = other.msg;
+        }
+        return *this;
       }
 
       int len() { return size; }

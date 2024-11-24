@@ -114,8 +114,9 @@ main (int argc, char *argv[])
   MTHeader mth;
   mth.SetF1(2);
   Ptr<ModularTransport> transport = src->GetObject<ModularTransport>();
-  Simulator::Schedule(Seconds(1), &ModularTransport::SendPacket, transport, packet, mth, saddr, daddr);
-  
+
+  // Simulator::Schedule(Seconds(1), &ModularTransport::SendPacket, transport, packet, mth, saddr, daddr);
+  // Simulator::Schedule(Seconds(1), &ModularTransport::SendPacket, packet, saddr, daddr);
 
   Simulator::Run ();
   Simulator::Destroy ();

@@ -2,7 +2,6 @@
 #define MT_PACKET_H
 
 #include "mt-header.h"
-#include "mtp-types.h"
 #include "ns3/packet.h"
 #include "ns3/buffer.h"
 
@@ -14,8 +13,9 @@ namespace ns3 {
       // header is MTHeader type 
       // data is Buffer type - included in ns3's Packet class in a field called m_buffer
     public:
-      pkt_t();
-      ~pkt_t();
+      pkt_t()  {}
+      ~pkt_t() {}
+      pkt_t(Packet pkt);
       
       // length in bytes
       int len();
@@ -31,7 +31,7 @@ namespace ns3 {
       MTHeader extract_hdr();
   };
 
-  pkt_t new_pkt() { return pkt_t(); }
+  inline pkt_t new_pkt() { return pkt_t(); }
 
 }
 

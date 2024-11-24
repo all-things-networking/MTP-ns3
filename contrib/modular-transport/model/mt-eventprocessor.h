@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <utility> // std::pair
-#include "mt-intermediateoutput.h"
 #include "mt-event.h"
 
 namespace ns3
@@ -15,9 +14,9 @@ class Packet;
 struct EventProcessorOutput {
     std::vector<MTEvent *> events;
     MTContext* ctx;
+    MTIntermediateOutput* intermOutput;
     std::vector<Packet> packets;
     // TODO: Add tx_module
-    MTIntermediateOutput* intermOutput;
  };
  
 /**
@@ -26,7 +25,8 @@ struct EventProcessorOutput {
 class MTEventProcessor
 {
 public:
-    MTEventProcessor();
+    MTEventProcessor() {}
+    virtual ~MTEventProcessor() {}
 
     /**
      * \brief Process the event and return the processed results.

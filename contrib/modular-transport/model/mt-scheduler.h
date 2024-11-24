@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <queue>
-#include "../helper/mtp-types.h"
-#include "mt-event.h"
+#include "ns3/mtp-types.h"
+#include "ns3/mt-event.h"
 
 namespace ns3 {
   class queue_set {
@@ -25,6 +25,7 @@ namespace ns3 {
       bool is_empty();
 
       queue_set(int lower_limit, int upper_limit, bool (*drop_policy)(MTEvent *));
+      queue_set();
   }; 
 
   class MTScheduler {
@@ -36,7 +37,7 @@ namespace ns3 {
     unsigned int flowSelector;
 
     public:
-      MTScheduler(int lower_limit, int upper_limit, bool (*drop_policy)(MTEvent *));
+      MTScheduler();
       ~MTScheduler(){}
 
       // used to store data from packets belonging to this flow while they are being processed

@@ -1,17 +1,12 @@
-#include "mt-scheduler.h"
+#include "ns3/mt-scheduler.h"
 #include <iostream>
 
 namespace ns3 {
-  queue_set::queue_set(int lower_limit, int upper_limit, bool (*drop_policy)(MTEvent *)) : 
-    appQueue(lower_limit, upper_limit, drop_policy),
-    netQueue(lower_limit, upper_limit, drop_policy),
-    progQueue(lower_limit, upper_limit, drop_policy),
-    urgentQueue(lower_limit, upper_limit, drop_policy),
-    timerQueue(lower_limit, upper_limit, drop_policy),
-    memQueue(lower_limit, upper_limit, drop_policy),
+  queue_set::queue_set() :
     total_queues(6) {}
 
-  MTScheduler::MTScheduler(int lower_limit, int upper_limit, bool (*drop_policy)(MTEvent *)) : flowMap(queue_set(lower_limit, upper_limit, drop_policy)) {
+  MTScheduler::MTScheduler() {
+    flowMap = flow_map<queue_set>();
     eventSelector = flow_map<unsigned int>(0);
     flowSelector = 0;
   }

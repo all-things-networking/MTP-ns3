@@ -3,7 +3,6 @@
 
 #include "mt-flow-id.h"
 
-
 namespace ns3 {
   template<typename Value>
   class flow_map {
@@ -11,6 +10,8 @@ namespace ns3 {
     std::unordered_map<flow_id, Value> flowMap;
 
     public:
+      // deprecated: flow_map(int lower_limit, int upper_limit, bool (*drop_policy)(MTEvent *))
+
       flow_map(Value defaultVal) : defaultVal{defaultVal} {}
 
       // initializes defaultVal with a default-constructed Value (useful for objects)

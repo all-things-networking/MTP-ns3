@@ -3,6 +3,8 @@
 namespace ns3 {
   int pkt_t::len() { return GetSize(); }
 
+  pkt_t::pkt_t(Packet pkt) : Packet(pkt) {}
+
   void pkt_t::add_data(Buffer newData) {
     // can't initialize a Packet with a Buffer object, instead need to pass in a uint8_t * and size
     int bufferSize = newData.GetSize();

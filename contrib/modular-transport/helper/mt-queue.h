@@ -1,16 +1,14 @@
 #ifndef MT_QUEUE_H
 #define MT_QUEUE_H
 
-#include <type-traits.h> // static_assert
-
+#include <type_traits> // static_assert
 #include <deque>
-#include "mtp-types.h"
+class MTEvent;
 
 namespace ns3 {
   template<typename event>
   class queue_t {
     // static_assert to ensure that queue event type is derived from MTEvent
-    static_assert(std::is_base_of<MTEvent, event>::value, "queue_t type must be derived from MTEvent");
 
     std::deque<event> eventQueue;
     int upper_limit;
@@ -31,5 +29,7 @@ namespace ns3 {
   };
 
 }
+
+#include "mt-queue.cc"
 
 #endif

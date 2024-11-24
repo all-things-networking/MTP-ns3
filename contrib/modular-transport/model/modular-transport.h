@@ -3,13 +3,12 @@
 #define MODULAR_TRANSPORT_H
 
 #include "mt-rxapp.h"
-#include "mt-txnet.h"
-#include "mt-rxnet.h"
 #include "mt-scheduler.h"
 #include "mt-dispatcher.h"
 #include "mt-context.h"
-#include "../helper/mtp-types.h"
+#include "ns3/mtp-types.h"
 #include "mt-eventprocessor.h"
+
 #include "ns3/ip-l4-protocol.h"
 #include "ns3/ipv4-l3-protocol.h"
 #include "ns3/node.h"
@@ -61,14 +60,14 @@ class ModularTransport: public IpL4Protocol
      * \brief Send a packet
      *
      * \param pkt The packet to send
+     * \param outgoing The packet header
      * \param saddr The source Ipv4Address
      * \param daddr The destination Ipv4Address
      */
-    void SendPacket(Ptr<Packet> pkt,
-                    const Ipv4Address& saddr,
-                    const Ipv4Address& daddr) const; 
-
-    void HandleTimeout(MTEvent* ev);
+    // void SendPacket(Ptr<Packet> pkt,
+    //                 const MTHeader& outgoing,
+    //                 const Ipv4Address& saddr,
+    //                 const Ipv4Address& daddr) const; 
 
     // From IpL4Protocol
     enum IpL4Protocol::RxStatus Receive(Ptr<Packet> p,
@@ -104,7 +103,6 @@ class ModularTransport: public IpL4Protocol
 
     virtual MTContext* InitContext(flow_id fid){return NULL;}
 
-    virtual void print_debugging_info(flow_id fid){}
   protected:
     void DoDispose() override;
 
@@ -119,15 +117,10 @@ class ModularTransport: public IpL4Protocol
      */
     void NotifyNewAggregate() override;
     MTRXAppParser* rxapp;
-    MTTXNetScheduler* txnet;
-    MTRXNetParser* rxnet;
-    MTTXAppScheduler* txapp;
     MTScheduler* scheduler;
     MTDispatcher* dispatcher;
     MTIntermediateOutput* interm_output;
     flow_map<MTContext*> ctx_table;
-    bool drop_policy(MTEvent * event);
-    int lower_limit = 0, upper_limit = 10000; // for queue_t in scheduler types
 
   private:
     // MTDispatcher* dispatcher;

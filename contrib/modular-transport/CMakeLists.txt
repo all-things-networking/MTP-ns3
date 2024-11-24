@@ -19,17 +19,18 @@ build_lib(
                 helper/mt-list.cc
                 helper/mt-packet.cc
                 helper/mt-queue.cc
-                helper/mt-stream.cc
                 model/mt-context.cc
                 model/mt-dispatcher.cc
     HEADER_FILES model/modular-transport.h
                 helper/mtp-types.h
                 helper/mt-flow-id.h
                 helper/mt-header.h
+                helper/mt-flow-map.h
+                helper/mt-addr.h
+                helper/mt-app.h
                 helper/mt-list.h
                 helper/mt-packet.h
                 helper/mt-queue.h
-                helper/mt-stream.h
                 model/mt-event.h
                 model/mt-scheduler.h
                 model/mt-dispatcher.h

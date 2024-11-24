@@ -1,5 +1,4 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
-
 #include "modular-transport.h"
 
 namespace ns3
@@ -19,15 +18,9 @@ ModularTransport::GetTypeId()
     return tid;
 }
 
-// if the queue is full, do not drop any stored events,
-//  instead drop the new one
-bool ModularTransport::drop_policy(MTEvent * e) {
-    return false;
-}
-
 ModularTransport::ModularTransport()
 {
-    this->scheduler = new MTScheduler(lower_limit, upper_limit, &drop_policy);
+    this->scheduler = new MTScheduler();
     NS_LOG_FUNCTION(this);
 }
 
@@ -36,20 +29,14 @@ ModularTransport::~ModularTransport()
     NS_LOG_FUNCTION(this);
 }
 
-Ipv4Address cursaddr;//remove these after figuring out how to map flow_id and these info
-Ipv4Address curdaddr;
-
 void ModularTransport::ReceiveAppMessage(
                              const Ipv4Address& saddr,
                              const Ipv4Address& daddr){
-    cursaddr = saddr;
-    curdaddr = daddr;
-    MTEvent* ev = rxapp->request_parser(ns3::app_msg_t());
-    //std::cout <<"created the send event for flow "<< ev->flowId << std::endl;
+    MTEvent* ev = rxapp->request_parser(ns3::app_msg_t(), ev->flowId);
+    std::cout <<"created the send event for flow "<< ev->flowId << std::endl;
     scheduler->enqueue_event(ev->flowId,ev);
     Mainloop();
 }
-
 
 void ModularTransport::ReceiveNetPacket(
                              const Ipv4Address& saddr,
@@ -59,16 +46,11 @@ void ModularTransport::ReceiveNetPacket(
     Mainloop();
 }
 
-void ModularTransport::HandleTimeout(MTEvent* ev){
-    
-    scheduler->enqueue_event(ev->flowId,ev);
-    Mainloop();
-}
-
 void ModularTransport::Start(
                              const Ipv4Address& saddr,
                              const Ipv4Address& daddr/*,
                              MTContext* StartContext*/){
+
     Mainloop();
 }
 void ModularTransport::Mainloop(){
@@ -77,50 +59,46 @@ void ModularTransport::Mainloop(){
        // to process events
     while (!this->scheduler->is_empty()){
         MTEvent* e = this->scheduler->get_next_event();
-        flow_id eventFlowId = eventFlowId;
         std::cout <<"Main Loop: Currently Processing Event "<< typeid(*e).name() << std::endl;
         std::vector<MTEventProcessor*> ep= this->dispatcher->dispatch(e);
         //std::cout <<"got event procs : "<< ep.size() << std::endl;
-        MTContext* ctx = this->ctx_table[eventFlowId];
+        MTContext* ctx = this->ctx_table[e->flowId];
         if(!ctx){
-            std::cout <<"Main Loop: Creating New Context For Flow Id "<<eventFlowId<< std::endl;
-            ctx = InitContext(eventFlowId);
+            std::cout <<"Main Loop: Creating New Context For Flow Id "<<e->flowId<< std::endl;
+            ctx = InitContext(e->flowId);
         }
 
-        std::vector<MTEvent*> newEvents;
+         std::vector<MTEvent*> newEvents;
 
         EventProcessorOutput* epout = new EventProcessorOutput{newEvents, ctx, interm_output};
 
         //  // run through all processors
-        //if(e->subtype!=TIMER_EVENT)
          for (auto processor : ep) 
          {
-            std::cout << "MainLoop: Entering Eventproc "<<typeid(*processor).name()<< std::endl;
-
-            // PROCESSOR WILL DELETE e
+            std::cout <<"MainLoop: Entering Eventproc: "<<typeid(*processor).name()<< std::endl;
             epout = processor->process(e, epout);
          }
-         this->ctx_table[eventFlowId] = epout->ctx;
-         for (MTEvent * newEvent : epout->events) {
-            const std::string & typeString = newEvent->typeString;
-            if (newEvent->typeString == "SEND") {
-                // will never encounter SendEvents here since no EventProcessor generates them,  
-                //  only the ModularTransport::ReceiveAppEvent function above
-            } else if (newEvent->typeString == "PKT") {
-                SendPacket(&txnet->get_next_packet(newEvent), cursaddr, curdaddr);
-                std::cout <<"sending out a packet "<< std::endl;
-            } else {
-                std::cout <<"event type unsupported "<< std::endl;
-            }    
+
+         for (auto newEvent : epout->events)
+         {
+            switch (newEvent->subtype){
+                case PROG_EVENT:
+                    scheduler->enqueue_event(e->flowId,newEvent);
+                    break;
+                case NET_EVENT:
+                    // SendPacket(&txnet->get_next_packet(newEvent), cursaddr, curdaddr);
+                    std::cout <<"sending out a packet "<< std::endl;
+                    break;
+                default:
+                    std::cout <<"event type unsupported "<< std::endl;
+                    break;
+            }      
          }
          std::cout <<"_______________________________________________"<< std::endl;
-         if(ep.size() == 4)
-         print_debugging_info(eventFlowId);
 
     }
      std::cout <<"_______________________________________________"<< std::endl;
 }
-
 void
 ModularTransport::DoDispose()
 {
@@ -162,38 +140,44 @@ ModularTransport::NotifyNewAggregate()
     IpL4Protocol::NotifyNewAggregate();
 }
 
-void
-ModularTransport::SendPacket(Ptr<Packet> packet,
-                             const Ipv4Address& saddr,
-                             const Ipv4Address& daddr) const
-{
-    NS_LOG_FUNCTION(this << packet << saddr << daddr);
-    // TODO:Use NS_LOG_LOGIC to record information about the segment/packet being sent out.
-    Ptr<Ipv4> ipv4 = m_node->GetObject<Ipv4>();
-    if (ipv4)
-    {
-        Ipv4Header header;
-        header.SetSource(saddr);
-        header.SetDestination(daddr);
-        header.SetProtocol(PROT_NUMBER);
-        Socket::SocketErrno errno_;
-        Ptr<Ipv4Route> route;
-        if (ipv4->GetRoutingProtocol())
-        {
-            route = ipv4->GetRoutingProtocol()->RouteOutput(packet, header, nullptr, errno_);
-        }
-        else
-        {
-            NS_LOG_ERROR("No IPV4 Routing Protocol");
-            route = nullptr;
-        }
-        m_downTarget(packet, saddr, daddr, PROT_NUMBER, route);
-    }
-    else
-    {
-        NS_FATAL_ERROR("Trying to use ModularTransport on a node without an Ipv4 interface");
-    }
-}
+//void
+// ModularTransport::SendPacket(Ptr<Packet> packet,
+//                              const MTHeader& outgoing,
+//                              const Ipv4Address& saddr,
+//                              const Ipv4Address& daddr) const
+// {
+//     NS_LOG_FUNCTION(this << packet << saddr << daddr);
+//     // TODO:Use NS_LOG_LOGIC to record information about the segment/packet being sent out.
+
+//     MTHeader outgoingHeader = outgoing;
+   
+//     packet->AddHeader(outgoingHeader);
+
+//     Ptr<Ipv4> ipv4 = m_node->GetObject<Ipv4>();
+//     if (ipv4)
+//     {
+//         Ipv4Header header;
+//         header.SetSource(saddr);
+//         header.SetDestination(daddr);
+//         header.SetProtocol(PROT_NUMBER);
+//         Socket::SocketErrno errno_;
+//         Ptr<Ipv4Route> route;
+//         if (ipv4->GetRoutingProtocol())
+//         {
+//             route = ipv4->GetRoutingProtocol()->RouteOutput(packet, header, nullptr, errno_);
+//         }
+//         else
+//         {
+//             NS_LOG_ERROR("No IPV4 Routing Protocol");
+//             route = nullptr;
+//         }
+//         m_downTarget(packet, saddr, daddr, PROT_NUMBER, route);
+//     }
+//     else
+//     {
+//         NS_FATAL_ERROR("Trying to use ModularTransport on a node without an Ipv4 interface");
+//     }
+// }
 
 enum IpL4Protocol::RxStatus
 ModularTransport::Receive(Ptr<Packet> packet,
@@ -201,14 +185,7 @@ ModularTransport::Receive(Ptr<Packet> packet,
                           Ptr<Ipv4Interface> incomingInterface)
 {
     NS_LOG_FUNCTION(this << packet << incomingIpHeader << incomingInterface);
-    //NS_LOG_UNCOND("Received packet in ModularTransport");
-    std::vector<MTEvent*> newEvents = rxnet->packet_parser(incomingIpHeader,packet);
-    for(auto newEvent: newEvents){
-        scheduler->enqueue_event(newEvent->flowId,newEvent);
-    }
-    cursaddr = incomingIpHeader.GetDestination();
-    curdaddr = incomingIpHeader.GetSource();
-    Mainloop();
+    NS_LOG_UNCOND("Received packet in ModularTransport");
     return IpL4Protocol::RX_OK;
 }
 

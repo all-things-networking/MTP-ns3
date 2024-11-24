@@ -1,24 +1,30 @@
 #ifndef MT_TX_NET_H
 #define MT_TX_NET_H
 
-#include "mt-scheduler.h"
-#include "ns3/flow-map.h"
+#include "ns3/mt-scheduler.h"
+#include "ns3/mt-flow-map.h"
+#include "ns3/mt-event.h"
 
 namespace ns3 {
   class MTTXNetScheduler {
-    flow_map<queue_t<event_t *>> txQueues;
+    protected:
+      flow_map<queue_t<event_t *>> txQueues;
 
-    // for choosing next event/flow
-    flow_map<unsigned int> eventSelector;
-    unsigned int flowSelector;
+      // for choosing next event/flow
+      flow_map<unsigned int> eventSelector;
+      unsigned int flowSelector;
 
     public:
-      MTTXNetScheduler();
-      virtual ~MTTXNetScheduler();
+      MTTXNetScheduler() {
+        txQueues = flow_map<queue_t<event_t *>>();
+        eventSelector = flow_map<unsigned int>(0);
+        flowSelector = 0;
+      }
+      virtual ~MTTXNetScheduler() {}
 
       // initialize queues here
       virtual void initialize();
-      virtual pkt_t get_next_packet(MTEvent * event);
+      virtual pkt_t get_next_packet(MTEvent * e, flow_id id) = 0;
   };
 }
 

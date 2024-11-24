@@ -65,4 +65,14 @@ operator<<(std::ostream& os, const MTHeader& h)
     return os;
 }
 
+uint32_t 
+MTHeader::GetF1(){
+  return m_f1;
+}
+
+void
+MTHeader::SetF1(uint32_t f1){
+  m_f1 = f1;
+}
+
 } // ns3 namespace

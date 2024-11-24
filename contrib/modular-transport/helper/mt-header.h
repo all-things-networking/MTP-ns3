@@ -8,6 +8,8 @@ namespace ns3
 {
 
 class MTHeader : public Header {
+  uint32_t m_f1;  
+
   public:
 
     static TypeId GetTypeId();
@@ -28,6 +30,9 @@ class MTHeader : public Header {
     void Serialize(Buffer::Iterator start) const override;
     uint32_t Deserialize(Buffer::Iterator start) override;
     void Print(std::ostream& os) const override;
+
+    uint32_t GetF1();
+    void SetF1(uint32_t);
 };
 
 } // namespace ns3

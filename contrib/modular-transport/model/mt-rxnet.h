@@ -6,14 +6,16 @@
 #include "mt-scheduler.h"
 
 namespace ns3 {
+
+  // responsible for creating events based on packets received from network layer
   class MTRXNetParser {
     MTScheduler * sched;
 
     public:
-      MTRXNetParser(MTScheduler * sched);
-      virtual ~MTRXNetParser();
+      MTRXNetParser() {}
+      virtual ~MTRXNetParser() = 0;
 
-      virtual std::vector<event_t> packet_parser(Ipv4Header iphdr, pkt_t * pkt);
+      virtual std::vector<event_t *> packet_parser(Ipv4Header iphdr, pkt_t * pkt);
   };
 }
 

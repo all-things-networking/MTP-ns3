@@ -4,7 +4,7 @@
 namespace ns3 {
   template<typename T>
   class list {
-    vector<T> listVector;
+    std::vector<T> listVector;
     public:
       void add(T data);
       void remove(int i = 0);

@@ -5,9 +5,11 @@
 #include <cstdint> // int32_t
 #include <stdexcept> // std::runtime_error
 #include <string>
-#include "../helper/mtp-types.h"
+#include "ns3/mtp-types.h"
+// #include "ns3/mt-flow-id.h"
+// #include "ns3/mt-addr.h"
 
-namespace ns3{
+namespace ns3 {
 
 // TODO: Do we need to implement a TX_EVENT type (from page 27 of the Overleaf doc) ?
 
@@ -36,6 +38,7 @@ class MTEvent {
         long time;
         flow_id flowId;
         const std::string typeString;
+        uint8_t * data;
         virtual EventType getType() { return type; }
 
         // used as key in event processor's eventMap
@@ -49,6 +52,8 @@ class MTEvent {
         virtual ~MTEvent();
 };
 
+// event_t
+typedef MTEvent event_t;
 class MemEvent : public MTEvent {
     public:
         int32_t atomic_op;
@@ -60,27 +65,27 @@ class MemEvent : public MTEvent {
                 int32_t atomic_op, 
                 addr_t address, 
                 int length);
-        ~MemEvent() override;
+        virtual ~MemEvent() override;
 };
 
 class UrgentEvent : public MTEvent {
     public:
         UrgentEvent(long time, 
                     flow_id flowId);
-        ~UrgentEvent() override;
+        virtual ~UrgentEvent() override;
 };
 
 class ProgEvent : public MTEvent {
     public:
         ProgEvent(long time, 
                 flow_id flowId);
-        ~ProgEvent() override;
+        virtual ~ProgEvent() override;
 };
 
 class TimerEvent : public MTEvent {
     public:
         TimerEvent(long time, flow_id flowId);
-        ~TimerEvent() override;
+        virtual ~TimerEvent() override;
 };
 
 class NetEvent : public MTEvent {
@@ -88,7 +93,7 @@ class NetEvent : public MTEvent {
         NetEvent(EventType type,
                 long time, 
                 flow_id flowId);
-        ~NetEvent() override;
+        virtual ~NetEvent() override;
 };
 
 class AppEvent : public MTEvent {
@@ -96,16 +101,12 @@ class AppEvent : public MTEvent {
         AppEvent(EventType type,
                 long time, 
                 flow_id flowId);
-        ~AppEvent() override;
+        virtual ~AppEvent() override;
 };
 
 // are these necessary?
-flow_id get_flow_id(event_t * event) {
+inline flow_id get_flow_id(event_t * event) {
     return event->flowId;
-}
-
-void set_flow_id(event_t * event, flow_id id) {
-    event->flowId = id;
 }
 
 } // namespace ns3

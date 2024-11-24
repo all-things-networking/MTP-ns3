@@ -13,32 +13,46 @@ namespace ns3 {
         throw std::runtime_error("Invalid subtype for incoming event");
       }
     }
+  
+  MTEvent::~MTEvent() {}
 
   MemEvent::MemEvent(long time, flow_id flowId, int32_t atomic_op, addr_t address, int length): 
     MTEvent{EventType::INCOMING, EventSubtype::MEM_EVENT, time, flowId},
     atomic_op{atomic_op},
     address{address},
     length{length}
-    {}
+  {}
+
+  MemEvent::~MemEvent() {}
   
   UrgentEvent::UrgentEvent(long time, flow_id flowId):
     MTEvent{EventType::INCOMING, EventSubtype::URGENT_EVENT, time, flowId}
   {}
 
+  UrgentEvent::~UrgentEvent() {}
+
   ProgEvent::ProgEvent(long time, flow_id flowId):
     MTEvent{EventType::INCOMING, EventSubtype::PROG_EVENT, time, flowId}
   {}
+  
+  ProgEvent::~ProgEvent() {}
  
   TimerEvent::TimerEvent(long time, flow_id flowId):
     MTEvent{EventType::INCOMING, EventSubtype::TIMER_EVENT, time, flowId}
   {}
 
+  TimerEvent::~TimerEvent() {}
+
   NetEvent::NetEvent(EventType type, long time, flow_id flowId):
     MTEvent{type, EventSubtype::NET_EVENT, time, flowId}
   {}
 
+  NetEvent::~NetEvent() {}
+
   AppEvent::AppEvent(EventType type, long time, flow_id flowId):
     MTEvent{type, EventSubtype::APP_EVENT, time, flowId}
   {}
+
+  AppEvent::~AppEvent() {}
 
 } // namespace ns3

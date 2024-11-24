@@ -1,22 +1,23 @@
 #ifndef TX_APP_SCHEDULER_H
 #define TX_APP_SCHEDULER_H
 #include "ns3/packet.h"
-#include "modular-transport.h"
-#include "mt-event.h"
-#include "mt-scheduler.h"
-#include "../helper/mtp-types.h"
+#include "ns3/modular-transport.h"
+#include "ns3/mt-event.h"
+#include "ns3/mt-scheduler.h"
+#include "ns3/mtp-types.h"
 
 namespace ns3 {
     class MTTXAppScheduler {
-        stream memory;
-        flow_map<queue_set> flowMap;
+        protected:
+            // stream memory;
+            flow_map<queue_set> flowMap;
 
-        // for choosing next event/flow
-        flow_map<unsigned int> eventSelector;
-        unsigned int flowSelector;
+            // for choosing next event/flow
+            flow_map<unsigned int> eventSelector;
+            unsigned int flowSelector;
 
         public:
-            MTTXAppScheduler(ModularTransport *mt, int lower_limit, int upper_limit, bool (*drop_policy)(MTEvent *)) : flowMap(queue_set(lower_limit, upper_limit, drop_policy)) {
+            MTTXAppScheduler(ModularTransport *mt) : flowMap(queue_set()) {
                 eventSelector = flow_map<unsigned int>(0);
                 flowSelector = 0;
             }
