@@ -24,12 +24,17 @@ namespace ns3 {
       iterator next(iterator it) { return ++it; }
 
       // subscript operator which sets and returns default value if necessary
-      Value& operator[] (const flow_id & key) {
+      Value& operator[] (const int & key) {
         if (flowMap.find(key) == flowMap.end()) {
           flowMap[key] = defaultVal;
         }
         return flowMap[key];
       }
+
+      // Value& operator[] (const int & key) {
+      //   flow_id flowIdKey = (flow_id) key;
+      //   return flowMap[flowIdKey];
+      // }
       
       int size(){
         return flowMap.size();

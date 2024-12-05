@@ -1,13 +1,17 @@
 #ifndef MT_PACKET_H
 #define MT_PACKET_H
 
-#include "mt-header.h"
+/*
+ === DEPRECATED IN FAVOUR OF ns3::Packet CLASS ===
+*/
+
+// #include "ns3/mt-header.h"
 #include "ns3/packet.h"
 #include "ns3/buffer.h"
 
 const int UDP_DATA_BIT_SIZE = 524056; // 65507 bytes
 namespace ns3 {
-  // should we even inherit from ns3 Packet?
+  // deprecated - use ns3::Packet instead
   class pkt_t : public Packet {
     private:
       // header is MTHeader type 

@@ -6,6 +6,20 @@
 #include "ns3/udp-event.h"
 #include "ns3/udp-context.h"
 namespace ns3 {
+  // class UDPEventProcessorOutput : public MTEventProcessorOutput {
+  //   public:
+  //     UDPEventProcessorOutput(std::vector<MTEvent*> newEvents, MTContext* ctx) : MTEventProcessorOutput(newEvents, ctx) {
+  //       intermOutput 
+  //     }
+  //     UDPEventProcessorOutput(std::vector<MTEvent*> newEvents, MTContext* ctx, MTIntermediateOutput* intermOutput) : MTEventProcessorOutput(newEvents, ctx, intermOutput) {}
+  // };
+
+  class UDPIntermediateOutput : public MTIntermediateOutput {
+    public:
+      UDPIntermediateOutput() {}
+      virtual ~UDPIntermediateOutput() {}
+  };
+
   class UDPSendProcessor: public MTEventProcessor {
     public:
       UDPSendProcessor() {}

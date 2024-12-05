@@ -11,7 +11,6 @@ class MTHeader : public Header {
   uint32_t m_f1;  
 
   public:
-
     static TypeId GetTypeId();
 
     MTHeader();

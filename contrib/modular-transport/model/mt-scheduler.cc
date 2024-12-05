@@ -26,13 +26,18 @@ namespace ns3 {
   }
 
   MTEvent * MTScheduler::next_event_by_id(flow_id id) {
-    queue_set flowQueueSet = flowMap[id];
-    unsigned int selector=0;
-    do{
+    // reference to the flowMap entry we will pick out an event from
+    queue_set & flowQueueSet = flowMap[id];
+    unsigned int selector = 0;
+
+    do {
+      // choose a non-empty queue (via selector) to pop from
       selector = eventSelector[id]++ % flowQueueSet.total_queues;
     } while (flowQueueSet.get_queue(selector).empty());
+
+    // select the top event from the chosen queue
     MTEvent* ev = flowQueueSet.get_queue(selector).pop();
-    flowMap[id].pop_queue(selector);
+
     return ev;
   }
 
@@ -51,7 +56,7 @@ namespace ns3 {
     //std::cout <<"Scheduler: Checking For Pending Events."<< std::endl;
     for (auto it = flowMap.begin(); it != flowMap.end(); it++) {
       if (!it->second.is_empty()) {
-        //std::cout <<"found non empty event_queue for flow "<<it->first<< std::endl;
+        //std::cout <<"found non ep mpty event_queue for flow "<<it->first<< std::endl;
         return false;
       }
     }
@@ -79,6 +84,8 @@ namespace ns3 {
       case MEM_EVENT:
         memQueue.push(event);
         break;
+      default:
+        break;
     }
   }
 
@@ -87,7 +94,7 @@ namespace ns3 {
     return isEmpty;
   }
 
-  queue_t<MTEvent *> queue_set::get_queue(int selector){
+  queue_t<MTEvent *> & queue_set::get_queue(int selector){
     switch (selector) {
       case APP_EVENT:
         return appQueue;
@@ -101,6 +108,8 @@ namespace ns3 {
         return timerQueue;
       case MEM_EVENT:
         return memQueue;
+      default: 
+        return urgentQueue;
     }
   }
 

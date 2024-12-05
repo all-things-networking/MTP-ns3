@@ -7,14 +7,18 @@ namespace ns3 {
     subtype{std::move(subtype)},
     time{time},
     flowId{flowId},
-    typeString{typeString}
+    typeString{typeString},
+    deleted{true}
     {
-      if (type == EventType::INCOMING && (subtype != EventSubtype::APP_EVENT || subtype != EventSubtype::NET_EVENT)) {
-        throw std::runtime_error("Invalid subtype for incoming event");
+      if (type == EventType::INCOMING && (subtype != EventSubtype::APP_EVENT && subtype != EventSubtype::NET_EVENT)) {
+        throw std::runtime_error("Invalid subtype for incoming event - an incoming event must have originated either in the app or net layer");
       }
     }
   
-  MTEvent::~MTEvent() {}
+  MTEvent::~MTEvent() {
+    std::cout << "Deleting event at " << this << std::endl;
+    deleted = false;
+  }
 
   MemEvent::MemEvent(long time, flow_id flowId, int32_t atomic_op, addr_t address, int length): 
     MTEvent{EventType::INCOMING, EventSubtype::MEM_EVENT, time, flowId},

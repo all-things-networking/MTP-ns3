@@ -11,13 +11,11 @@
 
 namespace ns3 {
 
-// TODO: Do we need to implement a TX_EVENT type (from page 27 of the Overleaf doc) ?
-
 class MTHeader;
 
 enum EventType {
-    INCOMING, // event that transfers nothing to outer layers
-    OUTGOING,  // event that transfers packets or feedback to outer layers
+    INCOMING,  // event that transfers nothing to app or net layers (i.e. because it originated in one of them)
+    OUTGOING,  // event that transfers packets or feedback to app or net layers
     NONE
 };
 
@@ -39,6 +37,7 @@ class MTEvent {
         flow_id flowId;
         const std::string typeString;
         uint8_t * data;
+        bool deleted;
         virtual EventType getType() { return type; }
 
         // used as key in event processor's eventMap
@@ -54,6 +53,9 @@ class MTEvent {
 
 // event_t
 typedef MTEvent event_t;
+
+// hold feedback from memory reads/writes to be used in the transport layer
+//  e.g. to generate ACKs
 class MemEvent : public MTEvent {
     public:
         int32_t atomic_op;
@@ -68,6 +70,7 @@ class MemEvent : public MTEvent {
         virtual ~MemEvent() override;
 };
 
+// needs to be processed ASAP
 class UrgentEvent : public MTEvent {
     public:
         UrgentEvent(long time, 
@@ -75,19 +78,23 @@ class UrgentEvent : public MTEvent {
         virtual ~UrgentEvent() override;
 };
 
+// events created during the execution of the transport-layer program
+//  itself (as opposed to other events that represent external things coming in)
 class ProgEvent : public MTEvent {
     public:
         ProgEvent(long time, 
-                flow_id flowId);
+                  flow_id flowId);
         virtual ~ProgEvent() override;
 };
 
+// represents events that can be executed only after a timer is triggered
 class TimerEvent : public MTEvent {
     public:
         TimerEvent(long time, flow_id flowId);
         virtual ~TimerEvent() override;
 };
 
+// represents packets arriving from/outgoing to the network layer
 class NetEvent : public MTEvent {
     public:
         NetEvent(EventType type,
@@ -96,6 +103,7 @@ class NetEvent : public MTEvent {
         virtual ~NetEvent() override;
 };
 
+// represents requests arriving from/outgoing to the app layer
 class AppEvent : public MTEvent {
     public:
         AppEvent(EventType type,

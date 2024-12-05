@@ -1,5 +1,8 @@
 #include "mt-packet.h"
  
+/*
+ === DEPRECATED IN FAVOUR OF ns3::Packet CLASS ===
+*/
 namespace ns3 {
   int pkt_t::len() { return GetSize(); }
 

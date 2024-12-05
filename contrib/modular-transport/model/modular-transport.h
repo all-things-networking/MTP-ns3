@@ -2,20 +2,22 @@
 #ifndef MODULAR_TRANSPORT_H
 #define MODULAR_TRANSPORT_H
 
-#include "mt-rxapp.h"
-#include "mt-scheduler.h"
-#include "mt-dispatcher.h"
-#include "mt-context.h"
+#include "ns3/mt-rxapp.h"
+#include "ns3/mt-txnet.h"
+#include "ns3/mt-rxnet.h"
+#include "ns3/mt-txapp.h"
+#include "ns3/mt-scheduler.h"
+#include "ns3/mt-dispatcher.h"
+#include "ns3/mt-context.h"
 #include "ns3/mtp-types.h"
-#include "mt-eventprocessor.h"
+#include "ns3/mt-eventprocessor.h"
 
-#include "ns3/ip-l4-protocol.h"
 #include "ns3/ipv4-l3-protocol.h"
-#include "ns3/node.h"
+#include "ns3/ip-l4-protocol.h"
 #include "ns3/ipv4-address.h"
 #include "ns3/ipv6-address.h"
 #include "ns3/sequence-number.h"
-
+#include "ns3/node.h"
 namespace ns3
 {
 
@@ -64,10 +66,11 @@ class ModularTransport: public IpL4Protocol
      * \param saddr The source Ipv4Address
      * \param daddr The destination Ipv4Address
      */
-    // void SendPacket(Ptr<Packet> pkt,
-    //                 const MTHeader& outgoing,
-    //                 const Ipv4Address& saddr,
-    //                 const Ipv4Address& daddr) const; 
+    void SendPacket(Ptr<Packet> pkt,
+                    const Ipv4Address& saddr,
+                    const Ipv4Address& daddr) const; 
+
+    void HandleTimeout(MTEvent* ev);
 
     // From IpL4Protocol
     enum IpL4Protocol::RxStatus Receive(Ptr<Packet> p,
@@ -116,15 +119,15 @@ class ModularTransport: public IpL4Protocol
      * linking it to the ipv4 or ipv6 and setting up other relevant state.
      */
     void NotifyNewAggregate() override;
-    MTRXAppParser* rxapp;
     MTScheduler* scheduler;
+    MTRXAppParser* rxapp;
+    MTTXAppScheduler* txapp; 
+    MTTXNetScheduler* txnet;
+    MTRXNetParser* rxnet;
     MTDispatcher* dispatcher;
-    MTIntermediateOutput* interm_output;
     flow_map<MTContext*> ctx_table;
 
   private:
-    // MTDispatcher* dispatcher;
-    // MTReceiver* receiver;
     Ptr<Node> m_node;                                //!< the node this stack is associated with
     IpL4Protocol::DownTargetCallback m_downTarget;   //!< Callback to send packets over IPv4
     IpL4Protocol::DownTargetCallback6 m_downTarget6; //!< Callback to send packets over IPv6

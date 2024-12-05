@@ -11,13 +11,18 @@ class MTEvent;
 class MTContext;
 class Packet;
 
+// child class must initialize intermOutput field using its own subclass of MTIntermediateOutput
 struct EventProcessorOutput {
     std::vector<MTEvent *> events;
     MTContext* ctx;
     MTIntermediateOutput* intermOutput;
     std::vector<Packet> packets;
     // TODO: Add tx_module
- };
+
+    // public:
+    //     EventProcessorOutput(std::vector<MTEvent*> newEvents, MTContext* ctx) : events(events), ctx(ctx) {}
+    //     EventProcessorOutput(std::vector<MTEvent*> newEvents, MTContext* ctx, MTIntermediateOutput* intermOutput) : ctx(ctx), events(events), intermOutput(intermOutput) {}
+};
  
 /**
  * \brief The base class for event processor. This is virtual class.

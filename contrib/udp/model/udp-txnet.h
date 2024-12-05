@@ -13,12 +13,13 @@ namespace ns3 {
             UDPTXNetScheduler() {}
             ~UDPTXNetScheduler() override {}
 
-            virtual pkt_t get_next_packet(MTEvent * e, flow_id id) override {
-                txQueues[e->flowId].push(e);
+            virtual Ptr<Packet> get_next_packet(MTEvent * e) override {
+                flow_id id = e->flowId;
+                txQueues[id].push(e);
                 PktEvent * poppedEvent = (PktEvent *) txQueues[id].pop();
 
                 // poppedEvent->header, poppedEvent->payload, poppedEvent->src_addr, poppedEvent->dest_addr
-                pkt_t toReturn = pkt_t();
+                Ptr<Packet> toReturn = Create<Packet>();
 
                 delete poppedEvent;
                 return toReturn;

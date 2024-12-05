@@ -5,7 +5,9 @@
 #include "ns3/udp-header.h"
 
 namespace ns3 {
-  // receive data from app
+  // receive data from app 
+  //  (note: event processors should not create incoming events therefore an event processor
+  //   should never generate a SendEvent)
   class SendEvent : public MTEvent {
     public:
       int length;
@@ -14,6 +16,8 @@ namespace ns3 {
   };
 
   // receive packets from network layer
+  //  (note: event processors should not create incoming events therefore an event processor
+  //   should never generate a RecvEvent)
   class RecvEvent : public MTEvent {
     public:
       Ipv4Address transit_addr;
@@ -24,12 +28,12 @@ namespace ns3 {
   // transmit packets to network layer
   class PktEvent : public MTEvent {
     public:
-      UdpHeader header;
+      UDPHeader header;
       uint8_t * payload;
       Ipv4Address dest_addr;
       Ipv4Address src_addr;
       int length;
-      PktEvent(long time, flow_id flowId, UdpHeader header, uint8_t * payload, Ipv4Address src_addr, Ipv4Address dest_addr) 
+      PktEvent(long time, flow_id flowId, UDPHeader header, uint8_t * payload, Ipv4Address src_addr, Ipv4Address dest_addr) 
         : MTEvent(EventType::OUTGOING, EventSubtype::NET_EVENT, time, flowId, "PKT"),
           header{header}, payload{payload}, dest_addr{dest_addr}, src_addr{src_addr} {}
   };

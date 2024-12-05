@@ -20,7 +20,7 @@ namespace ns3 {
       int total_queues;
 
       void enqueue_event(MTEvent * event);
-      queue_t<MTEvent *> get_queue(int selector);
+      queue_t<MTEvent *> & get_queue(int selector);
       void pop_queue(int selector);
       bool is_empty();
 

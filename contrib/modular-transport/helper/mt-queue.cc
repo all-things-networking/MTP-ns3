@@ -2,6 +2,8 @@
 #define MT_QUEUE_CC
 
 #include "mt-queue.h"
+#include <typeinfo>
+#include <string>
 
 namespace ns3 {
   template<typename event>
@@ -43,7 +45,7 @@ namespace ns3 {
 
   template<typename event>
   void queue_t<event>::push(event e) {
-    // draft implementation
+    std::cout << "Pushing event " << e << " to queue" << std::endl;
 
     // if queue is full, remove first event from beginning that satisfies drop policy
     if (eventQueue.size() > upper_limit) {

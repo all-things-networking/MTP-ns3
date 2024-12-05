@@ -1,6 +1,6 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 
-#include "mt-header.h"
+#include "ns3/mt-header.h"
 
 namespace ns3
 {
@@ -47,8 +47,7 @@ MTHeader::Serialize(Buffer::Iterator start) const
 uint32_t
 MTHeader::Deserialize(Buffer::Iterator start)
 {
-    Buffer::Iterator i = start;
-    int unusedForNow = i.ReadNtohU32();
+    // Buffer::Iterator i = start;
     return GetSerializedSize();
 }
 

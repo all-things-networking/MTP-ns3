@@ -13,15 +13,14 @@ namespace ns3 {
             UDPRXAppParser() {};
             virtual ~UDPRXAppParser() {};
             
-            virtual event_t * request_parser(app_msg_t request, int flow_id) {
+            virtual event_t * request_parser(app_msg_t request) {
                 // remark: in spec, request_parser is meant to extract values from the
                 //  request to the RXAppParser-defined app_hdr class
                 //  but here, request goes in the message and not the header
-                pkt_t pkt = new_pkt();
 
                 auto now = std::chrono::system_clock::now();
                 long timestamp = std::chrono::system_clock::to_time_t(now);
-                return new SendEvent(timestamp, flow_id);
+                return new SendEvent(timestamp, request.flow_id);
             }
     };
 }

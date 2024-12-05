@@ -1,17 +1,26 @@
 #include "ns3/udp-eventprocessor.h"
 
 namespace ns3 {
-  EventProcessorOutput* UDPSendProcessor::process(MTEvent * e, EventProcessorOutput* epOut) {
-    EventProcessorOutput * newOutput = new EventProcessorOutput;
-    newOutput->packets = epOut->packets;
+  EventProcessorOutput* create_event_processor_output(EventProcessorOutput * epOut) {
+    EventProcessorOutput * newOutput = new EventProcessorOutput();
+    // newOutput->packets = epOut->packets;
     newOutput->ctx = epOut->ctx;
-    newOutput->intermOutput = epOut->intermOutput;
+    newOutput->events = epOut->events;
+    if (epOut->intermOutput) {
+      newOutput->intermOutput = epOut->intermOutput;
+    } else {
+      newOutput->intermOutput = new UDPIntermediateOutput();
+    }
+    return newOutput;
+  }
 
+  EventProcessorOutput* UDPSendProcessor::process(MTEvent * e, EventProcessorOutput* epOut) {
+    EventProcessorOutput * newOutput = create_event_processor_output(epOut);
     // construct PktEvent to be added to scheduler
-    UdpHeader hdr = UdpHeader();
+    UDPHeader hdr = UDPHeader();
     hdr.SetSourcePort(epOut->ctx->src_port);
     hdr.SetDestinationPort(epOut->ctx->dst_port);
-    // hdr.InitializeChecksum
+
 
     PktEvent * pktEvent = new PktEvent(e->time, e->flowId, hdr, e->data, epOut->ctx->src_addr, epOut->ctx->dst_addr);
     newOutput->events = {pktEvent};
@@ -27,14 +36,7 @@ namespace ns3 {
   }
 
   EventProcessorOutput* UDPRecvProcessor::process(MTEvent* e, EventProcessorOutput* epOut) {
-    std::vector<MTEvent*> newEvents;
-
-    EventProcessorOutput * newOutput = new EventProcessorOutput;
-    newOutput->events = epOut->events;
-    newOutput->packets = epOut->packets;
-    newOutput->ctx = epOut->ctx;
-    newOutput->intermOutput = epOut->intermOutput;
-    return newOutput;
+    return create_event_processor_output(epOut);
   }
 
   bool UDPRecvProcessor::isValidEvent(MTEvent* e) {
@@ -42,14 +44,7 @@ namespace ns3 {
   }
 
   EventProcessorOutput* UDPPktProcessor::process(MTEvent* e, EventProcessorOutput* epOut) {
-    std::vector<MTEvent*> newEvents;
-
-    EventProcessorOutput * newOutput = new EventProcessorOutput;
-    newOutput->events = epOut->events;
-    newOutput->packets = epOut->packets;
-    newOutput->ctx = epOut->ctx;
-    newOutput->intermOutput = epOut->intermOutput;
-    return newOutput;
+    return create_event_processor_output(epOut);
   }
 
   bool UDPPktProcessor::isValidEvent(MTEvent* e) {
@@ -57,14 +52,7 @@ namespace ns3 {
   }
 
   EventProcessorOutput* UDPFbProcessor::process(MTEvent* e, EventProcessorOutput* epOut) {
-    std::vector<MTEvent*> newEvents;
-
-    EventProcessorOutput * newOutput = new EventProcessorOutput;
-    newOutput->events = epOut->events;
-    newOutput->packets = epOut->packets;
-    newOutput->ctx = epOut->ctx;
-    newOutput->intermOutput = epOut->intermOutput;
-    return newOutput;
+    return create_event_processor_output(epOut);
   }
 
   bool UDPFbProcessor::isValidEvent(MTEvent* e) {

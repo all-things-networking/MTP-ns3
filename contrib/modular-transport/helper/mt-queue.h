@@ -11,8 +11,8 @@ namespace ns3 {
     // static_assert to ensure that queue event type is derived from MTEvent
 
     std::deque<event> eventQueue;
-    int upper_limit;
-    int lower_limit;
+    long unsigned int upper_limit;
+    long unsigned int lower_limit;
     bool (*drop_policy) (event);
     bool paused;
 

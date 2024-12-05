@@ -14,7 +14,7 @@ namespace ns3 {
       // not sure this needs to be a field
       app_hdr_t header;
       
-      virtual event_t * request_parser(app_msg_t request, int flow_id) = 0;
+      virtual event_t * request_parser(app_msg_t request) = 0;
   };
 }
 
