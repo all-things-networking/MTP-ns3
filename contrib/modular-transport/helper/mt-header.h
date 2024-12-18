@@ -30,6 +30,9 @@ class MTHeader : public Header {
     uint32_t Deserialize(Buffer::Iterator start) override;
     void Print(std::ostream& os) const override;
 
+    inline void SetSourcePort(uint16_t src_port) { src_port = src_port; }
+    inline void SetDestinationPort(uint16_t dst_port) { dst_port = dst_port; }
+
     uint32_t GetF1();
     void SetF1(uint32_t);
 };

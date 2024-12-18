@@ -22,17 +22,13 @@ namespace ns3 {
     hdr.SetDestinationPort(epOut->ctx->dst_port);
 
 
-    PktEvent * pktEvent = new PktEvent(e->time, e->flowId, hdr, e->data, epOut->ctx->src_addr, epOut->ctx->dst_addr);
+    PktEvent * pktEvent = new PktEvent(e->time, e->flowId, hdr, e->data);
     newOutput->events = {pktEvent};
 
     // delete SendEvent; we are finished with it 
     delete e;
 
     return newOutput;
-  }
-
-  bool UDPSendProcessor::isValidEvent(MTEvent* e) {
-    return e->typeString == "SEND";
   }
 
   EventProcessorOutput* UDPRecvProcessor::process(MTEvent* e, EventProcessorOutput* epOut) {

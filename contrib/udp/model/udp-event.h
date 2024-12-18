@@ -10,6 +10,7 @@ namespace ns3 {
   //   should never generate a SendEvent)
   class SendEvent : public MTEvent {
     public:
+      char addr;
       int length;
       uint8_t * data;
       SendEvent(long time, int flow_id) : MTEvent(EventType::INCOMING, EventSubtype::APP_EVENT, time, flow_id, "SEND") {}
@@ -30,12 +31,11 @@ namespace ns3 {
     public:
       UDPHeader header;
       uint8_t * payload;
-      Ipv4Address dest_addr;
-      Ipv4Address src_addr;
+      char addr;
       int length;
-      PktEvent(long time, flow_id flowId, UDPHeader header, uint8_t * payload, Ipv4Address src_addr, Ipv4Address dest_addr) 
+      PktEvent(long time, flow_id flowId, UDPHeader header, uint8_t * payload) 
         : MTEvent(EventType::OUTGOING, EventSubtype::NET_EVENT, time, flowId, "PKT"),
-          header{header}, payload{payload}, dest_addr{dest_addr}, src_addr{src_addr} {}
+          header{header}, payload{payload} {}
   };
 
   // write data back to app - comes after RecvEvent

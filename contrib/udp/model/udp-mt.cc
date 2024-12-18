@@ -1,9 +1,4 @@
 #include "ns3/udp-mt.h"
-#include "ns3/udp-rxapp.h"
-#include "ns3/udp-txnet.h"
-#include "ns3/udp-rxnet.h"
-#include "ns3/udp-txapp.h"
-#include "ns3/udp-dispatcher.h"
 
 namespace ns3 {
   MTUDP::MTUDP() {

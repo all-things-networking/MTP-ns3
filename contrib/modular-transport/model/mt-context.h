@@ -16,8 +16,6 @@ class MTContext{
 public:
     MTContext();
     int flow_id;
-    Ipv4Address src_addr;
-    Ipv4Address dst_addr;
     int src_port;
     int dst_port;
 

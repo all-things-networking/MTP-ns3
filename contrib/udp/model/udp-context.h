@@ -8,8 +8,6 @@ using namespace std;
 namespace ns3 {
   class UDPContext: public MTContext {
     public:
-      Ipv4Address src_addr;
-      Ipv4Address dst_addr;
       int src_port;
       int dst_port;
       int sent_count;
