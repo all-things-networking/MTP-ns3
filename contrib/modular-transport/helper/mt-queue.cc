@@ -7,7 +7,7 @@
 
 namespace ns3 {
   template<typename event>
-  queue_t<event>::queue_t(int lower_limit, int upper_limit, bool (*drop_policy) (event)): 
+  queue_t<event>::queue_t(long unsigned int lower_limit, long unsigned int upper_limit, bool (*drop_policy) (event)): 
     upper_limit{upper_limit},
     lower_limit{lower_limit},
     drop_policy{drop_policy},

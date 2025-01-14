@@ -16,7 +16,7 @@ namespace ns3 {
       int flow_id;
 
       app_msg_t(): size{0}, msg{nullptr}, flow_id{0} {}
-      app_msg_t(const app_msg_t& other, int size) : size{size}, msg{msg} {}
+      app_msg_t(const app_msg_t& other, int size) : size{size}, msg{other.msg} {}
       app_msg_t(uint8_t * other, int size) : size{size}, msg{other} {}
       app_msg_t(uint8_t * other, int size, int flow_id) : size{size}, msg{other}, flow_id{flow_id} {}
 
