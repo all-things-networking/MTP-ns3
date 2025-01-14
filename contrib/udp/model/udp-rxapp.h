@@ -8,7 +8,6 @@
 
 namespace ns3 {
     class UDPRXAppParser : public MTRXAppParser {
-        UDPContext * ctx;
         public:
             UDPRXAppParser() {};
             virtual ~UDPRXAppParser() {};
