@@ -41,12 +41,13 @@ public:
      */
     virtual EventProcessorOutput* process(MTEvent* e, EventProcessorOutput* epOut) = 0;
 
+    // DEPRECATED
     /**
      * \brief Check if the input event is valid event type for the processor.
      * \param e The input event to be processed.
      * \return True if input event type matches the processor type, false otherwise.
      */
-    virtual bool isValidEvent(MTEvent* e) = 0;
+    // virtual bool isValidEvent(MTEvent* e) = 0;
 };
 
 } // namespace ns3

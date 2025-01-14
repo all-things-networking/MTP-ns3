@@ -25,7 +25,6 @@ namespace ns3 {
       UDPSendProcessor() {}
       virtual ~UDPSendProcessor() {}
       EventProcessorOutput* process(MTEvent * e, EventProcessorOutput* epOut) override;
-      bool isValidEvent(MTEvent* e) override;
   };
 
   class UDPRecvProcessor : public MTEventProcessor {
@@ -33,7 +32,6 @@ namespace ns3 {
       UDPRecvProcessor() {}
       virtual ~UDPRecvProcessor() {}
       EventProcessorOutput* process(MTEvent* e, EventProcessorOutput* epOut) override;
-      bool isValidEvent(MTEvent* e) override;
   };
 
   class UDPPktProcessor : public MTEventProcessor {
@@ -41,7 +39,6 @@ namespace ns3 {
       UDPPktProcessor() {}
       virtual ~UDPPktProcessor() {}
       EventProcessorOutput* process(MTEvent* e, EventProcessorOutput* epOut) override;
-      bool isValidEvent(MTEvent* e) override;
   };
 
   class UDPFbProcessor : public MTEventProcessor {
@@ -49,7 +46,6 @@ namespace ns3 {
       UDPFbProcessor() {}
       virtual ~UDPFbProcessor() {}
       EventProcessorOutput* process(MTEvent* e, EventProcessorOutput* epOut) override;
-      bool isValidEvent(MTEvent* e) override;
   };
 }
 

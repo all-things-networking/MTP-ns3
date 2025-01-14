@@ -35,25 +35,14 @@ namespace ns3 {
     return create_event_processor_output(epOut);
   }
 
-  bool UDPRecvProcessor::isValidEvent(MTEvent* e) {
-    return e->typeString == "RECV";
-  }
-
   EventProcessorOutput* UDPPktProcessor::process(MTEvent* e, EventProcessorOutput* epOut) {
     return create_event_processor_output(epOut);
-  }
-
-  bool UDPPktProcessor::isValidEvent(MTEvent* e) {
-    return e->typeString == "PKT";
   }
 
   EventProcessorOutput* UDPFbProcessor::process(MTEvent* e, EventProcessorOutput* epOut) {
     return create_event_processor_output(epOut);
   }
-
-  bool UDPFbProcessor::isValidEvent(MTEvent* e) {
-    return e->typeString == "FB";
-  }
+  
 }
 
 
