@@ -9,9 +9,11 @@ namespace ns3
 
 class MTHeader : public Header {
   uint32_t m_f1;  
+  
 
   public:
     static TypeId GetTypeId();
+    uint16_t src_port, dst_port;
 
     MTHeader();
     ~MTHeader() override;
@@ -30,8 +32,8 @@ class MTHeader : public Header {
     uint32_t Deserialize(Buffer::Iterator start) override;
     void Print(std::ostream& os) const override;
 
-    inline void SetSourcePort(uint16_t src_port) { src_port = src_port; }
-    inline void SetDestinationPort(uint16_t dst_port) { dst_port = dst_port; }
+    inline void SetSourcePort(uint16_t src_port) { this->src_port = src_port; }
+    inline void SetDestinationPort(uint16_t dst_port) { this->dst_port = dst_port; }
 
     uint32_t GetF1();
     void SetF1(uint32_t);
