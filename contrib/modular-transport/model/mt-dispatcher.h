@@ -23,6 +23,8 @@ class MTDispatcher {
         std::unordered_map<std::string, std::vector<MTEventProcessor*>> eventMap;
 
     public:
+        MTDispatcher() {};
+
         // to ensure the class is abstract
         virtual ~MTDispatcher() {};
 

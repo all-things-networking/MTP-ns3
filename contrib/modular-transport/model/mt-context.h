@@ -20,7 +20,7 @@ public:
     int dst_port;
 
     // to ensure the class is abstract/not instantiable
-    virtual ~MTContext() = 0;
+    ~MTContext();
 };
 
 } // namespace ns3

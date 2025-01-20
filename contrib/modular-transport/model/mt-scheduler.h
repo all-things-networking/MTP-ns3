@@ -38,7 +38,7 @@ namespace ns3 {
 
     public:
       MTScheduler();
-      ~MTScheduler(){}
+      ~MTScheduler();
 
       // used to store data from packets belonging to this flow while they are being processed
       //flow_map<stream> transitoryMemory;

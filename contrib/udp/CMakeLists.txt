@@ -15,6 +15,14 @@ build_lib(
     SOURCE_FILES model/udp-dispatcher.cc
                 model/udp-eventprocessor.cc
                 model/udp-mt.cc
+                ../modular-transport/model/mt-scheduler.cc
+                ../modular-transport/model/modular-transport.cc
+                ../modular-transport/model/mt-dispatcher.cc
+                ../modular-transport/model/mt-txapp.cc
+                ../modular-transport/model/mt-txnet.cc
+                ../modular-transport/model/mt-event.cc
+                ../modular-transport/model/mt-context.cc
+                ../modular-transport/helper/mt-header.cc
     HEADER_FILES model/udp-context.h
                 model/udp-dispatcher.h
                 model/udp-event.h
@@ -25,6 +33,14 @@ build_lib(
                 model/udp-rxnet.h
                 model/udp-txapp.h
                 model/udp-txnet.h
+                ../modular-transport/model/mt-scheduler.h
+                ../modular-transport/model/modular-transport.h
+                ../modular-transport/model/mt-dispatcher.h
+                ../modular-transport/model/mt-txapp.h
+                ../modular-transport/model/mt-txnet.h
+                ../modular-transport/model/mt-event.h
+                ../modular-transport/model/mt-context.h
+                ../modular-transport/helper/mt-header.h
                 
     LIBRARIES_TO_LINK ${libinternet}
     TEST_SOURCES test/modular-transport-test-suite.cc

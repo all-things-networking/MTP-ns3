@@ -11,6 +11,8 @@ namespace ns3 {
     flowSelector = 0;
   }
 
+  MTScheduler::~MTScheduler() {}
+
   void MTScheduler::enqueue_event(flow_id id, MTEvent * event) {
     flowMap[id].enqueue_event(event);
     //std::cout <<"added event of type "<<event->subtype<<" for flow "<<event->flowId<< std::endl;
