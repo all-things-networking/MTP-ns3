@@ -5,16 +5,16 @@
 #include "mt-scheduler.h"
 
 namespace ns3 {
+  // responsible for creating events based on packets received from application layer
   class MTRXAppParser {
-    MTScheduler * sched;
     public:
-      MTRXAppParser(MTScheduler * sched);
-      virtual ~MTRXAppParser();
+      MTRXAppParser() {};
+      virtual ~MTRXAppParser() {};
 
       // not sure this needs to be a field
       app_hdr_t header;
       
-      virtual event_t request_parser(app_msg_t request);
+      virtual event_t * request_parser(app_msg_t request) = 0;
   };
 }
 

@@ -5,17 +5,17 @@
 #include <cstdint> // int32_t
 #include <stdexcept> // std::runtime_error
 #include <string>
-#include "../helper/mtp-types.h"
+#include "ns3/mtp-types.h"
+// #include "ns3/mt-flow-id.h"
+// #include "ns3/mt-addr.h"
 
-namespace ns3{
-
-// TODO: Do we need to implement a TX_EVENT type (from page 27 of the Overleaf doc) ?
+namespace ns3 {
 
 class MTHeader;
 
 enum EventType {
-    INCOMING, // event that transfers nothing to outer layers
-    OUTGOING,  // event that transfers packets or feedback to outer layers
+    INCOMING,  // event that transfers nothing to app or net layers (i.e. because it originated in one of them)
+    OUTGOING,  // event that transfers packets or feedback to app or net layers
     NONE
 };
 
@@ -35,6 +35,10 @@ class MTEvent {
         EventSubtype subtype;
         long time;
         flow_id flowId;
+        const std::string typeString;
+        uint8_t * data;
+        bool deleted;
+        virtual EventType getType() { return type; }
 
         // used as key in event processor's eventMap
         std::string name;
@@ -42,10 +46,16 @@ class MTEvent {
         MTEvent(EventType type, 
                 EventSubtype subtype,
                 long time, 
-                flow_id flowId);
+                flow_id flowId,
+                std::string typeString = "");
         virtual ~MTEvent();
 };
 
+// event_t
+typedef MTEvent event_t;
+
+// hold feedback from memory reads/writes to be used in the transport layer
+//  e.g. to generate ACKs
 class MemEvent : public MTEvent {
     public:
         int32_t atomic_op;
@@ -57,52 +67,54 @@ class MemEvent : public MTEvent {
                 int32_t atomic_op, 
                 addr_t address, 
                 int length);
-        ~MemEvent() override;
+        virtual ~MemEvent() override;
 };
 
+// needs to be processed ASAP
 class UrgentEvent : public MTEvent {
     public:
         UrgentEvent(long time, 
                     flow_id flowId);
-        ~UrgentEvent() override;
+        virtual ~UrgentEvent() override;
 };
 
+// events created during the execution of the transport-layer program
+//  itself (as opposed to other events that represent external things coming in)
 class ProgEvent : public MTEvent {
     public:
         ProgEvent(long time, 
-                flow_id flowId);
-        ~ProgEvent() override;
+                  flow_id flowId);
+        virtual ~ProgEvent() override;
 };
 
+// represents events that can be executed only after a timer is triggered
 class TimerEvent : public MTEvent {
     public:
         TimerEvent(long time, flow_id flowId);
-        ~TimerEvent() override;
+        virtual ~TimerEvent() override;
 };
 
+// represents packets arriving from/outgoing to the network layer
 class NetEvent : public MTEvent {
     public:
         NetEvent(EventType type,
                 long time, 
                 flow_id flowId);
-        ~NetEvent() override;
+        virtual ~NetEvent() override;
 };
 
+// represents requests arriving from/outgoing to the app layer
 class AppEvent : public MTEvent {
     public:
         AppEvent(EventType type,
                 long time, 
                 flow_id flowId);
-        ~AppEvent() override;
+        virtual ~AppEvent() override;
 };
 
 // are these necessary?
-flow_id get_flow_id(event_t * event) {
+inline flow_id get_flow_id(event_t * event) {
     return event->flowId;
-}
-
-void set_flow_id(event_t * event, flow_id id) {
-    event->flowId = id;
 }
 
 } // namespace ns3

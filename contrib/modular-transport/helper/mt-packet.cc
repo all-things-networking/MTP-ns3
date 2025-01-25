@@ -1,7 +1,12 @@
 #include "mt-packet.h"
  
+/*
+ === DEPRECATED IN FAVOUR OF ns3::Packet CLASS ===
+*/
 namespace ns3 {
   int pkt_t::len() { return GetSize(); }
+
+  pkt_t::pkt_t(Packet pkt) : Packet(pkt) {}
 
   void pkt_t::add_data(Buffer newData) {
     // can't initialize a Packet with a Buffer object, instead need to pass in a uint8_t * and size
@@ -12,6 +17,11 @@ namespace ns3 {
     AddAtEnd(Ptr<Packet>(&toAdd));
     // delete data array since the Packet constructor copies from it, so it's no longer needed
     delete[] data;
+  }
+
+  void pkt_t::add_data(uint8_t * newData, int size) {
+    Packet toAdd = Packet(newData, size);
+    AddAtEnd(Ptr<Packet>(&toAdd));
   }
 
   void pkt_t::get_data(uint8_t * outputBuffer, int bytesToCopy) { 
